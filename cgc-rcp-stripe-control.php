@@ -39,7 +39,7 @@ function cgc_rcp_sub_control_shortcode() {
 	$stripe_customer = Stripe_Customer::retrieve( $stripe_id );
 
 	if( rcp_stripe_is_customer( $user_ID ) ) : ?>
-		<form id="cgc_rcp_subscription">
+		<form id="cgc_rcp_subscription" method="post">
 			<fieldset id="subscription">
 				<?php foreach( rcp_get_subscription_levels( 'active' ) as $level ) : ?>
 					<label for="subscription_<?php echo $level->id; ?>">
