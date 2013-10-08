@@ -195,6 +195,8 @@ function cgc_rcp_process_sub_changes() {
 		$action = 'restart';
 	}
 
+	Stripe::setApiKey( $secret_key );
+
 	$customer = Stripe_Customer::retrieve( $customer_id );
 	$plan     = rcp_get_subscription_details( $subscription_id );
 	$plan_id  = strtolower( str_replace( ' ', '', $plan->name ) );
