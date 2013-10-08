@@ -39,8 +39,6 @@ function cgc_rcp_sub_control_shortcode() {
 	$stripe_customer = Stripe_Customer::retrieve( $stripe_id );
 
 	if( rcp_stripe_is_customer( $user_ID ) ) : ?>
-		<h3>Subscription</h3>
-		<p>Your status: <?php echo rcp_get_status(); ?></p>
 		<form id="cgc_rcp_subscription">
 			<fieldset id="subscription">
 				<?php foreach( rcp_get_subscription_levels( 'active' ) as $level ) : ?>
@@ -54,7 +52,6 @@ function cgc_rcp_sub_control_shortcode() {
 				<input id="edit-subscription" type="submit" class="cancel" name="end_subscription" value="End Payments"/>
 			</fieldset>
 		</form>
-		<h3>Stored Card Details</h3>
 		<script type="text/javascript">
 			var rcp_stripe_vars;
 
