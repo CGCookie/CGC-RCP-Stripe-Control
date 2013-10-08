@@ -207,7 +207,7 @@ function cgc_rcp_process_sub_changes() {
 		case 'edit' :
 
 			$customer->updateSubscription( array( 'plan' => $plan_id, 'prorate' => true ) );
-			update_user_meta( $user_id, 'rcp_subscription', absint( $_POST['subscription_level'] ) );
+			update_user_meta( $user_id, 'rcp_subscription_level', absint( $_POST['subscription_level'] ) );
 
 			break;
 
