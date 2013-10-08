@@ -42,7 +42,7 @@ function cgc_rcp_sub_control_shortcode() {
 	if( isset( $_GET['message'] ) ) : ?>
 	<div id="cgc_subscription_messages">
 		<?php
-			$type = 'updated';
+			$type = 'success';
 			switch( $_GET['message'] ) :
 
 				case 1 :
