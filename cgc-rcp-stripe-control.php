@@ -42,6 +42,7 @@ function cgc_rcp_sub_control_shortcode() {
 	if( isset( $_GET['message'] ) ) : ?>
 	<div id="cgc_subscription_messages">
 		<?php
+			$type = 'updated';
 			switch( $_GET['message'] ) :
 
 				case 1 :
@@ -60,9 +61,14 @@ function cgc_rcp_sub_control_shortcode() {
 					$message = 'Your stored card details have been updated';
 					break;
 
+				case 5 :
+					$message = 'The password you entered was incorrect';
+					$type    = 'error';
+					break;
+
 			endswitch;
 
-			echo '<p>' . $message . '</p>';
+			echo '<p class="' . $type . '">' . $message . '</p>';
 		?>
 	</div>
 	<?php endif; ?>
