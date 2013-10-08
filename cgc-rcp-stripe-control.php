@@ -111,7 +111,7 @@ function cgc_rcp_sub_control_shortcode() {
 		<h3>Your Stored Card Info</h3>
 
 		<ul id="rcp_stripe_card_info">
-			<?php $card = $stripe_customer->cards->data[ $stripe_customer->default_card ]; ?>
+			<?php $card = $stripe_customer->cards->retrieve( $stripe_customer->default_card ); ?>
 			<li>Type: <strong><?php echo $card->type; ?></strong></li>
 			<li>Last four digits: <strong><?php echo $card->last4; ?></strong></li>
 			<li>Expiration: <strong><?php echo $card->exp_month . ' / ' . $card->exp_year; ?></strong></li>
