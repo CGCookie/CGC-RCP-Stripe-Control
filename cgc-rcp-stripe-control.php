@@ -43,7 +43,7 @@ function cgc_rcp_sub_control_shortcode() {
 			<fieldset id="subscription">
 				<?php foreach( rcp_get_subscription_levels( 'active' ) as $level ) : ?>
 					<label for="subscription_<?php echo $level->id; ?>">
-						<input type="radio" id="subscription_<?php echo $level->id; ?>" name="subscription_level" value="<?php echo $level->id; ?>"<?php checked( $level->id, rcp_get_subscription( $user_ID ) ); ?>/>
+						<input type="radio" id="subscription_<?php echo $level->id; ?>" name="subscription_level" value="<?php echo $level->id; ?>"<?php checked( $level->id, rcp_get_subscription_id( $user_ID ) ); ?>/>
 						<?php echo $level->name; ?>
 					</label>
 				<?php endforeach; ?>
