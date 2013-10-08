@@ -72,12 +72,12 @@ function cgc_rcp_sub_control_shortcode() {
 			<div class="level-price">$<?php echo rcp_get_subscription_price( rcp_get_subscription_id( $user_ID ) ); ?></div>
 			<div class="next-pay-date">Next payment date: <?php echo rcp_get_expiration_date( $user_ID ); ?></div>
 		</div>
-
+		<button id="edit-subscription">Edit</button>
 	</div>
 
 <?php
 	if( rcp_stripe_is_customer( $user_ID ) ) : ?>
-		<form id="cgc_rcp_subscription" method="post">
+		<form id="cgc_rcp_subscription" method="post" >
 			<fieldset id="subscription">
 				<?php foreach( rcp_get_subscription_levels( 'active' ) as $level ) : ?>
 					<?php if( $level->price == 0 ) { continue; } ?>
@@ -89,12 +89,13 @@ function cgc_rcp_sub_control_shortcode() {
 				<?php endforeach; ?>
 				<input type="hidden" name="cus_id" value="<?php echo $stripe_id; ?>"/>
 				<input type="hidden" name="update_subscription" value="1"/>
-				<input id="edit-subscription" type="submit" class="update" name="submit_subscription_edit" value="Edit"/>
+				<input id="edit-subscription" type="submit" class="update" name="submit_subscription_edit" value="Update"/>
 				<?php if( ! rcp_is_recurring( $user_ID ) && get_user_meta( $user_ID, '_rcp_stripe_sub_cancelled', true ) ) : ?>
 					<input id="restart-subscription" type="submit" class="cancel" name="submit_subscription_restart" value="Restart Payments"/>
 				<?php else: ?>
 					<input id="end-subscription" type="submit" class="cancel" name="submit_subscription_end" value="End Payments"/>
 				<?php endif; ?>
+
 			</fieldset>
 		</form>
 		<script type="text/javascript">
