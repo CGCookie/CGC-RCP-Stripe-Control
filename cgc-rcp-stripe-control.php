@@ -42,6 +42,7 @@ function cgc_rcp_sub_control_shortcode() {
 		<form id="cgc_rcp_subscription" method="post">
 			<fieldset id="subscription">
 				<?php foreach( rcp_get_subscription_levels( 'active' ) as $level ) : ?>
+					<?php if( $level->price == 0 ) { continue; } ?>
 					<label for="subscription_<?php echo $level->id; ?>">
 						<input type="radio" id="subscription_<?php echo $level->id; ?>" name="subscription_level" value="<?php echo $level->id; ?>"<?php checked( $level->id, rcp_get_subscription_id( $user_ID ) ); ?>/>
 						<?php echo $level->name; ?>
@@ -205,6 +206,8 @@ function cgc_rcp_process_sub_changes() {
 
 		// Edit a subscription
 		case 'edit' :
+
+			// TODO:
 
 			$customer->updateSubscription( array( 'plan' => $plan_id, 'prorate' => true ) );
 			update_user_meta( $user_id, 'rcp_subscription_level', absint( $_POST['subscription_level'] ) );
