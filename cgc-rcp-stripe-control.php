@@ -42,21 +42,15 @@ function cgc_rcp_sub_control_shortcode() {
 		<h3>Subscription</h3>
 		<form id="cgc_rcp_subscription">
 			<fieldset id="subscription">
-				<label for="subscription_1">
-					<input type="radio" id="subscription_1" name="subscription_level" value="1"/>
-					Monthly
-				</label>
-				<label for="subscription_2">
-					<input type="radio" id="subscription_2" name="subscription_level" value="2"/>
-					Quarterly
-				</label>
-				<label for="subscription_3">
-					<input type="radio" id="subscription_3" name="subscription_level" value="3"/>
-					Yearly
-				</label>
+				<?php foreach( rcp_get_subscription_levels( 'active' ) as $level ) : ?>
+					<label for="subscription_<?php echo $level->id; ?>">
+						<input type="radio" id="subscription_<?php echo $level->id; ?>" name="subscription_level" value="<?php echo $level->id; ?>"/>
+						<?php echo $level->name; ?>
+					</label>
+				<?php endforeach; ?>
 				<span id="subscription_price">$18</span>
-				<input id="edit-subscription" type="submit" class="cancel" name="end_subscription" value="End Payments"/>
 				<input id="edit-subscription" type="submit" class="update" name="submit_subscription_edit" value="Edit"/>
+				<input id="edit-subscription" type="submit" class="cancel" name="end_subscription" value="End Payments"/>
 			</fieldset>
 		</form>
 		<h3>Stored Card Details</h3>
