@@ -83,10 +83,10 @@ function cgc_rcp_sub_control_shortcode() {
 					<?php if( $level->price == 0 ) { continue; } ?>
 					<label for="subscription_<?php echo $level->id; ?>">
 						<input type="radio" id="subscription_<?php echo $level->id; ?>" name="subscription_level" value="<?php echo $level->id; ?>"<?php checked( $level->id, rcp_get_subscription_id( $user_ID ) ); ?>/>
-						<?php echo $level->name; ?>
+						<span class="subscription-name"><?php echo $level->name; ?></span>
+						<span class="subscription-price"><?php echo rcp_currency_filter( $level->price ); ?></span>
 					</label>
 				<?php endforeach; ?>
-				<span id="subscription_price">$18</span>
 				<input type="hidden" name="cus_id" value="<?php echo $stripe_id; ?>"/>
 				<input type="hidden" name="update_subscription" value="1"/>
 				<input id="edit-subscription" type="submit" class="update" name="submit_subscription_edit" value="Edit"/>
