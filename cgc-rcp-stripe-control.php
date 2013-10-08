@@ -38,8 +38,34 @@ function cgc_rcp_sub_control_shortcode() {
 	Stripe::setApiKey( $secret_key );
 	$stripe_customer = Stripe_Customer::retrieve( $stripe_id );
 
-?>
 
+	if( isset( $_GET['message'] ) ) : ?>
+	<div id="cgc_subscription_messages">
+		<?php
+			switch( $_GET['message'] ) :
+
+				case 1 :
+					$message = 'Your subscription has been successfully updated';
+					break;
+
+				case 2 :
+					$message = 'Your payments have been stopped. You will not be billed again';
+					break;
+
+				case 3 :
+					$message = 'Your payments have been restarted.';
+					break;
+
+				case 4 :
+					$message = 'Your stored card details have been updated';
+					break;
+
+			endswitch;
+
+			echo '<p>' . $message . '</p>';
+		?>
+	</div>
+	<?php endif; ?>
 	<div id="cgc_subscription_overview">
 		<div id="subscription_details">
 			<p class="level"><?php echo rcp_get_subscription( $user_ID ); ?></p>
@@ -219,10 +245,14 @@ function cgc_rcp_process_sub_changes() {
 		// Edit a subscription
 		case 'edit' :
 
+			// TODO: support lifetime
+
 			$customer->updateSubscription( array( 'plan' => $plan_id, 'prorate' => true ) );
 			update_user_meta( $user_id, 'rcp_subscription_level', absint( $_POST['subscription_level'] ) );
 			$exp = rcp_calc_member_expiration( rcp_get_subscription_details( absint( $_POST['subscription_level'] ) ) );
 			update_user_meta( $user_id, 'rcp_expiration', $exp );
+
+			wp_redirect( home_url( '/settings/?message=1#subscription' ) ); exit;
 
 			break;
 
@@ -236,6 +266,8 @@ function cgc_rcp_process_sub_changes() {
 			update_user_meta( $user_id, '_rcp_stripe_sub_cancelled', 'yes' );
 			update_user_meta( $user_id, 'rcp_recurring', 'no' );
 
+			wp_redirect( home_url( '/settings/?message=2#subscription' ) ); exit;
+
 			break;
 
 		case 'restart' :
@@ -243,6 +275,8 @@ function cgc_rcp_process_sub_changes() {
 			$customer->updateSubscription( array( 'plan' => $plan_id, 'prorate' => true ) );
 			delete_user_meta( $user_id, '_rcp_stripe_sub_cancelled' );
 			update_user_meta( $user_id, 'rcp_recurring', 'yes' );
+
+			wp_redirect( home_url( '/settings/?message=3#subscription' ) ); exit;
 
 			break;
 	}
