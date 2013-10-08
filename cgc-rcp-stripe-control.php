@@ -219,10 +219,10 @@ function cgc_rcp_process_sub_changes() {
 		// Edit a subscription
 		case 'edit' :
 
-			// TODO:
-
 			$customer->updateSubscription( array( 'plan' => $plan_id, 'prorate' => true ) );
 			update_user_meta( $user_id, 'rcp_subscription_level', absint( $_POST['subscription_level'] ) );
+			$exp = rcp_calc_member_expiration( rcp_get_subscription_details( absint( $_POST['subscription_level'] ) ) );
+			update_user_meta( $user_id, 'rcp_expiration', $exp );
 
 			break;
 
