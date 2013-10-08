@@ -95,6 +95,7 @@ function cgc_rcp_sub_control_shortcode() {
 				<?php else: ?>
 					<input id="end-subscription" type="submit" class="cancel" name="submit_subscription_end" value="End Payments"/>
 				<?php endif; ?>
+				<button class="cancel" id="nevermind">Never Mind</button>
 
 			</fieldset>
 		</form>
