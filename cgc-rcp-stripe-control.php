@@ -38,6 +38,18 @@ function cgc_rcp_sub_control_shortcode() {
 	Stripe::setApiKey( $secret_key );
 	$stripe_customer = Stripe_Customer::retrieve( $stripe_id );
 
+?>
+
+	<div id="cgc_subscription_overview">
+		<div id="subscription_details">
+			<span class="level"><?php echo rcp_get_subscription( $user_ID ); ?></span>
+			<span class="level-price">$<?php echo rcp_get_subscription_price( rcp_get_subscription_id( $user_ID ) ); ?></span>
+			<span class="next-pay-date">Next payment date: <?php echo rcp_get_expiration_date( $user_ID ); ?></span>
+		</div>
+
+	</div>
+
+<?php
 	if( rcp_stripe_is_customer( $user_ID ) ) : ?>
 		<form id="cgc_rcp_subscription" method="post">
 			<fieldset id="subscription">
