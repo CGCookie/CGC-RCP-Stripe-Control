@@ -42,9 +42,9 @@ function cgc_rcp_sub_control_shortcode() {
 
 	<div id="cgc_subscription_overview">
 		<div id="subscription_details">
-			<span class="level"><?php echo rcp_get_subscription( $user_ID ); ?></span>
-			<span class="level-price">$<?php echo rcp_get_subscription_price( rcp_get_subscription_id( $user_ID ) ); ?></span>
-			<span class="next-pay-date">Next payment date: <?php echo rcp_get_expiration_date( $user_ID ); ?></span>
+			<p class="level"><?php echo rcp_get_subscription( $user_ID ); ?></p>
+			<p class="level-price">$<?php echo rcp_get_subscription_price( rcp_get_subscription_id( $user_ID ) ); ?></p>
+			<p class="next-pay-date">Next payment date: <?php echo rcp_get_expiration_date( $user_ID ); ?></p>
 		</div>
 
 	</div>
