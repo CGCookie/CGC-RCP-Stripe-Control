@@ -96,6 +96,7 @@ function cgc_rcp_sub_control_shortcode() {
 					$('#rcp_ajax_loading').show();
 					// createToken returns immediately - the supplied callback submits the form if there are no errors
 					Stripe.createToken({
+						name: $('.card-name').val(),
 						number: $('.card-number').val(),
 						cvc: $('.card-cvc').val(),
 						exp_month: $('.card-expiry-month').val(),
@@ -118,6 +119,10 @@ function cgc_rcp_sub_control_shortcode() {
 		<h3>Update Your Stored Card</h3>
 		<form id="rcp_stripe_card_form" class="rcp_form" action="" method="POST">
 			<div class="card-errors"></div>
+			<p>
+		        <label>Name on the Card</label>
+		        <input type="text" size="20" autocomplete="off" class="card-name" />
+		    </p>
 			<p>
 		        <label>Card Number</label>
 		        <input type="text" size="20" autocomplete="off" class="card-number" />
