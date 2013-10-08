@@ -46,11 +46,11 @@ function cgc_rcp_sub_control_shortcode() {
 			switch( $_GET['message'] ) :
 
 				case 1 :
-					$message = 'Your subscription has been successfully updated';
+					$message = 'Your subscription has been successfully updated.';
 					break;
 
 				case 2 :
-					$message = 'Your payments have been stopped. You will not be billed again';
+					$message = 'Your payments have been stopped. You will not be billed again.';
 					break;
 
 				case 3 :
@@ -58,11 +58,11 @@ function cgc_rcp_sub_control_shortcode() {
 					break;
 
 				case 4 :
-					$message = 'Your stored card details have been updated';
+					$message = 'Your stored card details have been updated.';
 					break;
 
 				case 5 :
-					$message = 'The password you entered was incorrect';
+					$message = 'The password you entered was incorrect.';
 					$type    = 'error';
 					break;
 
