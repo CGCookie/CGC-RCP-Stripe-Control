@@ -48,8 +48,14 @@ function cgc_rcp_sub_control_shortcode() {
 					</label>
 				<?php endforeach; ?>
 				<span id="subscription_price">$18</span>
+				<input type="hidden" name="cus_id" value="<?php echo $stripe_id; ?>"/>
+				<input type="hidden" name="update_subscription" value="1"/>
 				<input id="edit-subscription" type="submit" class="update" name="submit_subscription_edit" value="Edit"/>
-				<input id="edit-subscription" type="submit" class="cancel" name="end_subscription" value="End Payments"/>
+				<?php if( ! rcp_is_recurring( $user_ID ) && get_user_meta( $user_ID, '_rcp_stripe_sub_cancelled', true ) ) : ?>
+					<input id="restart-subscription" type="submit" class="cancel" name="submit_subscription_restart" value="Restart Payments"/>
+				<?php else: ?>
+					<input id="end-subscription" type="submit" class="cancel" name="submit_subscription_end" value="End Payments"/>
+				<?php endif; ?>
 			</fieldset>
 		</form>
 		<script type="text/javascript">
@@ -155,3 +161,74 @@ function cgc_rcp_sub_control_shortcode() {
 	<p>Billing trouble? <a href="#">Contact support</a>.</p>
 <?php
 }
+
+
+function cgc_rcp_process_sub_changes() {
+
+	if( ! isset( $_POST['update_subscription'] ) )
+		return;
+
+	if( ! is_user_logged_in() )
+		return;
+
+	$user_id = get_current_user_id();
+	$customer_id = rcp_get_stripe_customer_id( $user_id );
+
+	// Ensure the posted customer ID matches the ID stored for the currently logged-in user
+	if( $customer_id != $_POST['cus_id'] )
+		return;
+
+	global $rcp_options;
+
+	// Grab the Stripe API key
+	if( isset( $rcp_options['stripe_test_mode'] ) ) {
+		$secret_key = trim( $rcp_options['stripe_test_secret'] );
+	} else {
+		$secret_key = trim( $rcp_options['stripe_live_secret'] );
+	}
+
+	if( isset( $_POST['submit_subscription_edit'] ) ) {
+		$action = 'edit';
+	} elseif( isset( $_POST['submit_subscription_end'] ) ) {
+		$action = 'cancel';
+	} elseif( isset( $_POST['submit_subscription_restart'] ) ) {
+		$action = 'restart';
+	}
+
+	$customer = Stripe_Customer::retrieve( $customer_id );
+	$plan     = rcp_get_subscription_details( $subscription_id );
+	$plan_id  = strtolower( str_replace( ' ', '', $plan->name ) );
+
+	switch( $action ) {
+
+		// Edit a subscription
+		case 'edit' :
+
+			$customer->updateSubscription( array( 'plan' => $plan_id, 'prorate' => true ) );
+
+			break;
+
+
+		// Cancel a subscription
+		case 'cancel' :
+
+			$customer->cancelSubscription( array( 'at_period_end' => true ) );
+
+			// the subscription is not cancelled until period comes to an end
+			update_user_meta( $user_id, '_rcp_stripe_sub_cancelled', 'yes' );
+			update_user_meta( $user_id, 'rcp_recurring', 'no' );
+
+			break;
+
+		case 'restart' :
+
+			$customer->updateSubscription( array( 'plan' => $plan_id, 'prorate' => true ) );
+			delete_user_meta( $user_id, '_rcp_stripe_sub_cancelled' );
+			update_user_meta( $user_id, 'rcp_recurring', 'yes' );
+
+			break;
+	}
+
+
+}
+add_action( 'init', 'cgc_rcp_process_sub_changes' );
