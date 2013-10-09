@@ -394,7 +394,7 @@ function cgc_rcp_process_sub_changes() {
 		$action = 'cancel';
 	} elseif( $action == 10 ) {
 		$action = 'upgrade_to_lifetime';
-	} elseif( $action == 'restart' ) ) {
+	} elseif( $action == 'restart' ) {
 		$action = 'restart';
 	} elseif( $action ) {
 		$action = 'edit';
