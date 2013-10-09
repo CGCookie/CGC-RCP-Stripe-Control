@@ -15,7 +15,6 @@
  */
 
 
-
 function cgc_rcp_sub_control_shortcode() {
 
 	global $user_ID, $rcp_options;
@@ -451,6 +450,7 @@ function cgc_rcp_process_sub_changes() {
 			update_user_meta( $user_id, 'rcp_subscription_level', absint( $_POST['subscription_level'] ) );
 			$exp = rcp_calc_member_expiration( rcp_get_subscription_details( absint( $_POST['subscription_level'] ) ) );
 			update_user_meta( $user_id, 'rcp_expiration', $exp );
+			rcp_set_status( $user_id, 'active' );
 
 			wp_redirect( home_url( '/settings/?message=1#subscription' ) ); exit;
 
@@ -479,6 +479,7 @@ function cgc_rcp_process_sub_changes() {
 			delete_user_meta( $user_id, 'rcp_recurring' );
 			update_user_meta( $user_id, 'rcp_subscription_level', absint( $_POST['subscription_level'] ) );
 			update_user_meta( $user_id, 'rcp_expiration', 'none' );
+			rcp_set_status( $user_id, 'active' );
 
 			wp_redirect( home_url( '/settings/?message=1#subscription' ) ); exit;
 
@@ -506,6 +507,7 @@ function cgc_rcp_process_sub_changes() {
 			update_user_meta( $user_id, 'rcp_subscription_level', absint( $_POST['subscription_level'] ) );
 			$exp = rcp_calc_member_expiration( rcp_get_subscription_details( absint( $_POST['subscription_level'] ) ) );
 			update_user_meta( $user_id, 'rcp_expiration', $exp );
+			rcp_set_status( $user_id, 'active' );
 
 			wp_redirect( home_url( '/settings/?message=3#subscription' ) ); exit;
 
