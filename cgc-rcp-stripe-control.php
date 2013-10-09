@@ -250,7 +250,9 @@ function cgc_rcp_sub_control_shortcode() {
 			foreach( $payments as $payment ) :
 				echo '<div class="member_payment">';
 					echo '<span class="payment-date">' . date( 'F j, Y', strtotime( $payment->date ) ) . '</span>';
+					echo '<span class="payment-sep">&nbsp;&ndash;&nbsp;</span>'
 					echo '<span class="payment-duration">' . $payment->subscription . '</span>';
+					echo '<span class="payment-sep">&nbsp;&ndash;&nbsp;</span>'
 					echo '<span class="payment-amount">$' . number_format( $payment->amount, 2 ) . '</span>';
 				echo '</div>';
 			endforeach;
