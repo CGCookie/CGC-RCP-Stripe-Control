@@ -249,7 +249,7 @@ function cgc_rcp_sub_control_shortcode() {
 					<input type="hidden" id="current_sub_id" name="current_sub_id" value="<?php echo rcp_get_subscription_id( $user_ID ); ?>"/>
 					<input type="hidden" name="update_subscription" value="1"/>
 					<input id="edit-subscription" type="submit" class="update" name="submit_subscription_edit" value="Update"/>
-					<a href="#" class="close-reveal-modal button cancel">Nevermind</a>
+					<a href="#" class="close-reveal-modal">Nevermind</a>
 				</div>
 			</div>
 		</form>
