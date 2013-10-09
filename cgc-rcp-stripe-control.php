@@ -128,11 +128,20 @@ function cgc_rcp_sub_control_shortcode() {
 
 			jQuery(document).ready(function($) {
 
-				// Modify subscription
+				// Toggle subscription edit
 				$('.toggle-subscription-edit').click(function(e) {
 					e.preventDefault();
 					$('.toggle-subscription-edit').toggle();
 					$('#subscription_details .level-name, #subscription_options_menu').toggle();
+				});
+
+				// Update price and payment due date when changing subscriptions
+				$('#subscription_options_menu select').change(function() {
+					var sub_id = $(this).val();
+					var price = $('#subscription_price_' + sub_id).val();
+					var exp   = $('#subscription_expiration_' + sub_id).val();
+					$('#subscription_details .level-price').text( price );
+					$('#subscription_details .payment-date').text( exp );
 				});
 
 				// Change active card form
