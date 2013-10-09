@@ -97,6 +97,60 @@ function cgc_rcp_sub_control_shortcode() {
 		</div>
 	<?php elseif( rcp_stripe_is_customer( $user_ID ) ) : ?>
 
+		<script type="text/javascript">
+			var rcp_stripe_vars;
+
+			// this identifies your website in the createToken call below
+			Stripe.setPublishableKey('<?php echo $publishable_key; ?>');
+
+			function stripeResponseHandler(status, response) {
+				if (response.error) {
+					// re-enable the submit button
+					jQuery('#rcp_update_card').attr("disabled", false);
+
+					// show the errors on the form
+					jQuery(".card-errors").html(response.error.message);
+					jQuery('#rcp_ajax_loading').hide();
+
+				} else {
+					jQuery('#rcp_ajax_loading').hide();
+					var form$ = jQuery("#rcp_stripe_card_form");
+					// token contains id, last4, and card type
+					var token = response['id'];
+					// insert the token into the form so it gets submitted to the server
+					form$.append("<input type='hidden' name='stripeToken' value='" + token + "' />");
+
+					// and submit
+					form$.get(0).submit();
+
+				}
+			}
+
+			jQuery(document).ready(function($) {
+
+				// Modify subscription
+				$('#edit-subscription').click(function() {
+					$('#subscription_details .level-name, #subscription_options_menu').toggle();
+				});
+
+				// Change active card form
+				$("#rcp_update_card").on('click', function(event) {
+
+					$('#rcp_ajax_loading').show();
+					// createToken returns immediately - the supplied callback submits the form if there are no errors
+					Stripe.createToken({
+						name: $('.card-name').val(),
+						number: $('.card-number').val(),
+						cvc: $('.card-cvc').val(),
+						exp_month: $('.card-expiry-month').val(),
+						exp_year: $('.card-expiry-year').val()
+					}, stripeResponseHandler);
+					return false; // submit from callback
+				});
+			});
+
+		</script>
+
 		<form id="cgc_rcp_subscription" method="post">
 			<div id="cgc_subscription_overview">
 				<button id="edit-subscription">Modify Subscription</button>
@@ -145,54 +199,6 @@ function cgc_rcp_sub_control_shortcode() {
 				<input id="restart-subscription" type="submit" class="cancel" name="submit_subscription_restart" value="Restart Payments"/>
 			<?php endif; ?>
 		</form>
-		<script type="text/javascript">
-			var rcp_stripe_vars;
-
-			// this identifies your website in the createToken call below
-			Stripe.setPublishableKey('<?php echo $publishable_key; ?>');
-
-			function stripeResponseHandler(status, response) {
-				if (response.error) {
-					// re-enable the submit button
-					jQuery('#rcp_update_card').attr("disabled", false);
-
-					// show the errors on the form
-					jQuery(".card-errors").html(response.error.message);
-					jQuery('#rcp_ajax_loading').hide();
-
-				} else {
-					jQuery('#rcp_ajax_loading').hide();
-					var form$ = jQuery("#rcp_stripe_card_form");
-					// token contains id, last4, and card type
-					var token = response['id'];
-					// insert the token into the form so it gets submitted to the server
-					form$.append("<input type='hidden' name='stripeToken' value='" + token + "' />");
-
-					// and submit
-					form$.get(0).submit();
-
-				}
-			}
-
-			jQuery(document).ready(function($) {
-
-				$("#rcp_update_card").on('click', function(event) {
-
-					$('#rcp_ajax_loading').show();
-					// createToken returns immediately - the supplied callback submits the form if there are no errors
-					Stripe.createToken({
-						name: $('.card-name').val(),
-						number: $('.card-number').val(),
-						cvc: $('.card-cvc').val(),
-						exp_month: $('.card-expiry-month').val(),
-						exp_year: $('.card-expiry-year').val()
-					}, stripeResponseHandler);
-					return false; // submit from callback
-				});
-			});
-
-		</script>
-
 		<h3>Your Stored Card Info</h3>
 
 		<ul id="rcp_stripe_card_info">
