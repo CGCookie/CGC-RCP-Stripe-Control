@@ -151,6 +151,7 @@ function cgc_rcp_sub_control_shortcode() {
 					var sub_id  = $(this).val();
 					var price   = $('#subscription_price_' + sub_id).val();
 					var exp     = $('#subscription_expiration_' + sub_id).val();
+					var currrent_exp  = $('#subscription_expiration_' + current_sub_id).val();
 					var current_level = $('#current_sub_name').val();
 					var new_level     = $('#subscription_options_menu select option:selected').text();
 
@@ -160,7 +161,7 @@ function cgc_rcp_sub_control_shortcode() {
 
 					} else if ( new_level == 'Cancel Subscription' ) {
 
-						var message = 'Your subscription payments will be cancelled immediately but you will retain access to all Citizen content until the end of term, ' + exp;
+						var message = 'Your subscription payments will be cancelled immediately but you will retain access to all Citizen content until the end of term, ' + currrent_exp;
 
 					} else {
 						var message = 'Your subscription will be changed from ' + current_level + ' to ' + new_level + '. You will now be billed ' + price + '. Click Update below to confirm the change to your subscription.';
