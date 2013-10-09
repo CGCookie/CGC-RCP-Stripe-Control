@@ -452,6 +452,8 @@ function cgc_rcp_process_sub_changes() {
 			update_user_meta( $user_id, 'rcp_expiration', $exp );
 			rcp_set_status( $user_id, 'active' );
 
+			do_action( 'cgc_rcp_subscription_changed', $user_id, $plan_id );
+
 			wp_redirect( home_url( '/settings/?message=1#subscription' ) ); exit;
 
 			break;
@@ -481,6 +483,8 @@ function cgc_rcp_process_sub_changes() {
 			update_user_meta( $user_id, 'rcp_expiration', 'none' );
 			rcp_set_status( $user_id, 'active' );
 
+			do_action( 'cgc_rcp_subscription_upgrade_to_lifetime', $user_id );
+
 			wp_redirect( home_url( '/settings/?message=1#subscription' ) ); exit;
 
 			break;
@@ -495,6 +499,8 @@ function cgc_rcp_process_sub_changes() {
 			update_user_meta( $user_id, '_rcp_stripe_sub_cancelled', 'yes' );
 			delete_user_meta( $user_id, 'rcp_recurring' );
 
+			do_action( 'cgc_rcp_subscription_cancelled', $user_id );
+
 			wp_redirect( home_url( '/settings/?message=2#subscription' ) ); exit;
 
 			break;
@@ -508,6 +514,8 @@ function cgc_rcp_process_sub_changes() {
 			$exp = rcp_calc_member_expiration( rcp_get_subscription_details( absint( $_POST['subscription_level'] ) ) );
 			update_user_meta( $user_id, 'rcp_expiration', $exp );
 			rcp_set_status( $user_id, 'active' );
+
+			do_action( 'cgc_rcp_subscription_restarted', $user_id, $plan_id );
 
 			wp_redirect( home_url( '/settings/?message=3#subscription' ) ); exit;
 
