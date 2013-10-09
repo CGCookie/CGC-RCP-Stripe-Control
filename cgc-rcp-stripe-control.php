@@ -151,6 +151,8 @@ function cgc_rcp_sub_control_shortcode() {
 					var sub_id  = $(this).val();
 					var price   = $('#subscription_price_' + sub_id).val();
 					var exp     = $('#subscription_expiration_' + sub_id).val();
+					var current_level = $('#current_sub_name').val();
+					var new_level     = $('#subscription_options_menu select option:selected').text();
 					var message = 'Your subscription will be changed from ' + current_level + ' to ' + new_level + '. You will now be billed ' + price;
 
 					$('#subscription_details .level-price .amount').text( price );
@@ -257,6 +259,7 @@ function cgc_rcp_sub_control_shortcode() {
 					<input type="password" id="pass" name="pass" value=""/>
 					<input type="hidden" name="cus_id" value="<?php echo $stripe_id; ?>"/>
 					<input type="hidden" id="current_sub_id" name="current_sub_id" value="<?php echo rcp_get_subscription_id( $user_ID ); ?>"/>
+					<input type="hidden" id="current_sub_name" name="current_sub_name" value="<?php echo rcp_get_subscription( $user_ID ); ?>"/>
 					<input type="hidden" name="update_subscription" value="1"/>
 					<input id="edit-subscription" type="submit" class="update" name="submit_subscription_edit" value="Update"/>
 					<a href="#" class="close-reveal-modal">Nevermind</a>
