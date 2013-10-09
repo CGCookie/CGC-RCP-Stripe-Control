@@ -476,7 +476,7 @@ function cgc_rcp_process_sub_changes() {
 
 			// the subscription is not cancelled until period comes to an end
 			update_user_meta( $user_id, '_rcp_stripe_sub_cancelled', 'yes' );
-			update_user_meta( $user_id, 'rcp_recurring', 'no' );
+			delete_user_meta( $user_id, 'rcp_recurring' );
 			update_user_meta( $user_id, 'rcp_subscription_level', absint( $_POST['subscription_level'] ) );
 			update_user_meta( $user_id, 'rcp_expiration', 'none' );
 
@@ -492,7 +492,7 @@ function cgc_rcp_process_sub_changes() {
 
 			// the subscription is not cancelled until period comes to an end
 			update_user_meta( $user_id, '_rcp_stripe_sub_cancelled', 'yes' );
-			update_user_meta( $user_id, 'rcp_recurring', 'no' );
+			delete_user_meta( $user_id, 'rcp_recurring' );
 
 			wp_redirect( home_url( '/settings/?message=2#subscription' ) ); exit;
 
