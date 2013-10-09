@@ -164,6 +164,7 @@ function cgc_rcp_sub_control_shortcode() {
 						pass: $(this).val()
 					};
 					$.post(cgc_scripts.ajaxurl, data, function(response) {
+						console.log( response ):
 						if( response == 'valid' ) {
 							form$.get(0).submit();
 						} else {
