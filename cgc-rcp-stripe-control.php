@@ -68,6 +68,11 @@ function cgc_rcp_sub_control_shortcode() {
 					$type    = 'error';
 					break;
 
+				case 6 :
+					$message = 'Grimlims got in the way and something went wrong. Please try again.';
+					$type    = 'error';
+					break;
+
 			endswitch;
 
 			echo '<p class="' . $type . '">' . $message . '</p>';
@@ -167,8 +172,14 @@ function cgc_rcp_sub_control_shortcode() {
 						var message = 'Your subscription will be changed from ' + current_level + ' to ' + new_level + '. You will now be billed ' + price + '. Click Update below to confirm the change to your subscription.';
 					}
 
-					$('#subscription_details .level-price .amount').text( price );
-					$('#subscription_details .payment-date').text( exp );
+					if( new_level == 'Cancel Subscription' ) {
+						$('#subscription_details .level-price, #subscription_details .payment-date').hide();
+					} else {
+
+						$('#subscription_details .level-price .amount').text( price );
+						$('#subscription_details .payment-date').text( exp );
+						$('#subscription_details .level-price, #subscription_details .payment-date').show();
+					}
 
 					$('#sub-update-message').text( message ).slideDown();
 
@@ -377,12 +388,16 @@ function cgc_rcp_process_sub_changes() {
 		$secret_key = trim( $rcp_options['stripe_live_secret'] );
 	}
 
-	if( isset( $_POST['submit_subscription_edit'] ) ) {
-		$action = 'edit';
-	} elseif( isset( $_POST['submit_subscription_end'] ) ) {
+	$action = isset( $_POST['subscription_level'] ) ? $_POST['subscription_level'] : false;
+
+	if( $action == 'x' ) {
 		$action = 'cancel';
-	} elseif( isset( $_POST['submit_subscription_restart'] ) ) {
+	} elseif( $action == 10 ) {
+		$action = 'upgrade_to_lifetime';
+	} elseif( $action == 'restart' ) ) {
 		$action = 'restart';
+	} elseif( $action ) {
+		$action = 'edit';
 	}
 
 	Stripe::setApiKey( $secret_key );
@@ -395,17 +410,33 @@ function cgc_rcp_process_sub_changes() {
 		wp_redirect( home_url( '/settings/?message=5#subscription' ) ); exit;
 	}
 
+	if( ! $action ) {
+		wp_redirect( home_url( '/settings/?message=6#subscription' ) ); exit;
+	}
+
 	switch( $action ) {
 
 		// Edit a subscription
 		case 'edit' :
 
-			// TODO: support lifetime
-
 			$customer->updateSubscription( array( 'plan' => $plan_id, 'prorate' => true ) );
 			update_user_meta( $user_id, 'rcp_subscription_level', absint( $_POST['subscription_level'] ) );
 			$exp = rcp_calc_member_expiration( rcp_get_subscription_details( absint( $_POST['subscription_level'] ) ) );
 			update_user_meta( $user_id, 'rcp_expiration', $exp );
+
+			wp_redirect( home_url( '/settings/?message=1#subscription' ) ); exit;
+
+			break;
+
+		case 'upgrade_to_lifetime' :
+
+			$customer->cancelSubscription( array( 'at_period_end' => false ) );
+
+			// the subscription is not cancelled until period comes to an end
+			update_user_meta( $user_id, '_rcp_stripe_sub_cancelled', 'yes' );
+			update_user_meta( $user_id, 'rcp_recurring', 'no' );
+			update_user_meta( $user_id, 'rcp_subscription_level', absint( $_POST['subscription_level'] ) );
+			update_user_meta( $user_id, 'rcp_expiration', 'none' );
 
 			wp_redirect( home_url( '/settings/?message=1#subscription' ) ); exit;
 
