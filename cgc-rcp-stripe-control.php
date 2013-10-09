@@ -128,7 +128,7 @@ function cgc_rcp_sub_control_shortcode() {
 						</span>
 					</div>
 					<div class="next-pay-date">
-						<label>Next payment date: </label>
+						<span>Next payment date: </span>
 						<span class="payment-date"><?php echo rcp_get_expiration_date( $user_ID ); ?></span>
 					</div>
 				</div>
