@@ -173,12 +173,12 @@ function cgc_rcp_sub_control_shortcode() {
 					}
 
 					if( new_level == 'Cancel Subscription' ) {
-						$('#subscription_details .level-price, #subscription_details .payment-date').hide();
+						$('#subscription_details .level-price, #subscription_details .next-pay-date').hide();
 					} else {
 
 						$('#subscription_details .level-price .amount').text( price );
 						$('#subscription_details .payment-date').text( exp );
-						$('#subscription_details .level-price, #subscription_details .payment-date').show();
+						$('#subscription_details .level-price, #subscription_details .next-pay-date').show();
 					}
 
 					$('#sub-update-message').text( message ).slideDown();
