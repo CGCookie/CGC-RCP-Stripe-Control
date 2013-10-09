@@ -151,7 +151,7 @@ function cgc_rcp_sub_control_shortcode() {
 					var sub_id  = $(this).val();
 					var price   = $('#subscription_price_' + sub_id).val();
 					var exp     = $('#subscription_expiration_' + sub_id).val();
-					var message = 'Your subscription will be changed from ' + current_level + ' to ' + new_level '. You will now be billed ' + price;
+					var message = 'Your subscription will be changed from ' + current_level + ' to ' + new_level + '. You will now be billed ' + price;
 
 					$('#subscription_details .level-price .amount').text( price );
 					$('#subscription_details .payment-date').text( exp );
