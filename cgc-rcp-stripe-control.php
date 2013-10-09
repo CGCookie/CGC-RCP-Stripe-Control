@@ -161,7 +161,7 @@ function cgc_rcp_sub_control_shortcode() {
 					var form$ = $(this);
 					var data = {
 						action: 'validate_subscription_password',
-						pass: $(this).val()
+						pass: $('#pass').val()
 					};
 					$.post(cgc_scripts.ajaxurl, data, function(response) {
 						console.log( response );
