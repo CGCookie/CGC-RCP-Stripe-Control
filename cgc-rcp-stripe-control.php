@@ -107,13 +107,15 @@ function cgc_rcp_sub_control_shortcode() {
 
 						<span class="level-name"><?php echo rcp_get_subscription( $user_ID ); ?></span>
 
-						<select id="subscription_<?php echo $level->id; ?>" name="subscription_level" style="display:none;">
-							<?php foreach( $levels as $level ) : ?>
-								<?php if( $level->price == 0 ) { continue; } ?>
-								<option value="<?php echo $level->id; ?>"<?php selected( $level->id, $current_level->id ); ?>><?php echo $level->name; ?></option>
-							<?php endforeach; ?>
-							<option value="x">Cancel Subscription</option>
-						</select>
+						<div id="subscription_options_menu" style="display:none;">
+							<select id="subscription_<?php echo $level->id; ?>" name="subscription_level" style="display:none;">
+								<?php foreach( $levels as $level ) : ?>
+									<?php if( $level->price == 0 ) { continue; } ?>
+									<option value="<?php echo $level->id; ?>"<?php selected( $level->id, $current_level->id ); ?>><?php echo $level->name; ?></option>
+								<?php endforeach; ?>
+								<option value="x">Cancel Subscription</option>
+							</select>
+						</div>
 
 						<?php // Now output hidden values ?>
 						<?php foreach( $levels as $level ) : ?>
