@@ -129,7 +129,8 @@ function cgc_rcp_sub_control_shortcode() {
 			jQuery(document).ready(function($) {
 
 				// Modify subscription
-				$('#edit-subscription').click(function() {
+				$('#edit-subscription').click(function(e) {
+					e.preventDefault();
 					$('#subscription_details .level-name, #subscription_options_menu').toggle();
 				});
 
