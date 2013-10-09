@@ -214,6 +214,11 @@ function cgc_rcp_sub_control_shortcode() {
 				</div>
 			</div>
 
+			<div id="password-wrap">
+				<label for="pass">Enter your password</label>
+				<input type="password" id="pass" name="pass" value=""/>
+			</div>
+
 			<input type="hidden" name="cus_id" value="<?php echo $stripe_id; ?>"/>
 			<input type="hidden" id="current_sub_id" name="current_sub_id" value="<?php echo rcp_get_subscription_id( $user_ID ); ?>"/>
 			<input type="hidden" name="update_subscription" value="1"/>
