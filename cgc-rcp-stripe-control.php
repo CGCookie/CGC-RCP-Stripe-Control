@@ -135,6 +135,7 @@ function cgc_rcp_sub_control_shortcode() {
 					e.preventDefault();
 					$('.toggle-subscription-edit').toggle();
 					$('#subscription_details .level-name, #subscription_options_menu').toggle();
+					$('#submit-wrap').toggle();
 				});
 
 				$('#cancel-edit-subscription').click(function(e) {
@@ -214,18 +215,18 @@ function cgc_rcp_sub_control_shortcode() {
 				</div>
 			</div>
 
-			<div id="password-wrap">
+			<div id="submit-wrap" style="display:none">
 				<label for="pass">Enter your password</label>
 				<input type="password" id="pass" name="pass" value=""/>
-			</div>
 
-			<input type="hidden" name="cus_id" value="<?php echo $stripe_id; ?>"/>
-			<input type="hidden" id="current_sub_id" name="current_sub_id" value="<?php echo rcp_get_subscription_id( $user_ID ); ?>"/>
-			<input type="hidden" name="update_subscription" value="1"/>
-			<input id="edit-subscription" type="submit" class="update" name="submit_subscription_edit" value="Update"/>
-			<?php if( ! rcp_is_recurring( $user_ID ) && get_user_meta( $user_ID, '_rcp_stripe_sub_cancelled', true ) ) : ?>
-				<input id="restart-subscription" type="submit" class="cancel" name="submit_subscription_restart" value="Restart Payments"/>
-			<?php endif; ?>
+				<input type="hidden" name="cus_id" value="<?php echo $stripe_id; ?>"/>
+				<input type="hidden" id="current_sub_id" name="current_sub_id" value="<?php echo rcp_get_subscription_id( $user_ID ); ?>"/>
+				<input type="hidden" name="update_subscription" value="1"/>
+				<input id="edit-subscription" type="submit" class="update" name="submit_subscription_edit" value="Update"/>
+				<?php if( ! rcp_is_recurring( $user_ID ) && get_user_meta( $user_ID, '_rcp_stripe_sub_cancelled', true ) ) : ?>
+					<input id="restart-subscription" type="submit" class="cancel" name="submit_subscription_restart" value="Restart Payments"/>
+				<?php endif; ?>
+			</div>
 		</form>
 		<h3>Your Stored Card Info</h3>
 
