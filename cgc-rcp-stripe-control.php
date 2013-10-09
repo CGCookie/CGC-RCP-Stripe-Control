@@ -238,7 +238,7 @@ function cgc_rcp_sub_control_shortcode() {
 						<?php // Now output hidden values ?>
 						<?php foreach( $levels as $level ) : ?>
 							<?php if( $level->price == 0 ) { continue; } ?>
-							<input type="hidden" id="subscription_price_<?php echo $level->id; ?>" value="$<?php echo rcp_get_subscription_price( $level->id ); ?> for every <?php echo $current_level->duration . ' ' . rcp_filter_duration_unit( $current_level->duration_unit, $current_level->duration ); ?>"/>
+							<input type="hidden" id="subscription_price_<?php echo $level->id; ?>" value="$<?php echo rcp_get_subscription_price( $level->id ); ?> for every <?php echo $level->duration . ' ' . rcp_filter_duration_unit( $level->duration_unit, $level->duration ); ?>"/>
 							<input type="hidden" id="subscription_expiration_<?php echo $level->id; ?>" value="<?php echo date( 'F j, Y', strtotime( rcp_calc_member_expiration( $level ) ) ); ?>"/>
 						<?php endforeach; ?>
 					</div>
