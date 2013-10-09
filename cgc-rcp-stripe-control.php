@@ -25,6 +25,8 @@ function cgc_rcp_sub_control_shortcode() {
 		return;
 
 
+	$current_level = rcp_get_subscription_details( rcp_get_subscription_id( $user_ID ) );
+
 	$stripe_id = rcp_get_stripe_customer_id( $user_ID );
 
 	if( isset( $rcp_options['stripe_test_mode'] ) ) {
@@ -73,20 +75,22 @@ function cgc_rcp_sub_control_shortcode() {
 	</div>
 	<?php endif; ?>
 
-
 	<?php if( ! rcp_stripe_is_customer( $user_ID ) ) : // For PayPal users ?>
 		<div id="cgc_subscription_overview">
 			<div id="subscription_details">
 				<div class="level">
-					<label>My Subscription: </label>
-					<span class="level-name"><?php echo rcp_get_subscription( $user_ID ); ?></span>
+					<span>My Subscription: </span>
+					<span class="level-name"><?php echo $current_level->name; ?></span>
 				</div>
 				<div class="level-price">
-					<label>Amount: </label>
-					<span class="amount">$<?php echo rcp_get_subscription_price( rcp_get_subscription_id( $user_ID ) ); ?></span>
+					<span>Amount: </span>
+					<span class="amount">
+						<span>$<?php echo rcp_get_subscription_price( $current_level->id ); ?> </span>
+						<span>for <?php echo $current_level->duration . ' ' . rcp_filter_duration_unit( $current_level->duration_unit, $current_level->duration ); ?></span>
+					</span>
 				</div>
 				<div class="next-pay-date">
-					<label>Next payment date: </label>
+					<span>Next payment date: </span>
 					<span class="payment-date"><?php echo rcp_get_expiration_date( $user_ID ); ?></span>
 				</div>
 			</div>
@@ -100,17 +104,17 @@ function cgc_rcp_sub_control_shortcode() {
 					<div class="level">
 						<?php
 						$levels = rcp_get_subscription_levels( 'active' );
-						$current_level = rcp_get_subscription_details( rcp_get_subscription_id( $user_ID ) );
 						?>
 						<span>My Subscription: </span>
 
 						<span class="level-name"><?php echo rcp_get_subscription( $user_ID ); ?></span>
 
 						<select id="subscription_<?php echo $level->id; ?>" name="subscription_level" style="display:none;">
-						<?php foreach( $levels as $level ) : ?>
-							<?php if( $level->price == 0 ) { continue; } ?>
-							<option value="<?php echo $level->id; ?>"<?php selected( $level->id, $current_level->id ); ?>><?php echo $level->name; ?></option>
-						<?php endforeach; ?>
+							<?php foreach( $levels as $level ) : ?>
+								<?php if( $level->price == 0 ) { continue; } ?>
+								<option value="<?php echo $level->id; ?>"<?php selected( $level->id, $current_level->id ); ?>><?php echo $level->name; ?></option>
+							<?php endforeach; ?>
+							<option value="x">Cancel Subscription</option>
 						</select>
 
 						<?php // Now output hidden values ?>
@@ -134,15 +138,12 @@ function cgc_rcp_sub_control_shortcode() {
 				</div>
 			</div>
 
-				<input type="hidden" name="cus_id" value="<?php echo $stripe_id; ?>"/>
-				<input type="hidden" name="update_subscription" value="1"/>
-				<input id="edit-subscription" type="submit" class="update" name="submit_subscription_edit" value="Update"/>
-				<?php if( ! rcp_is_recurring( $user_ID ) && get_user_meta( $user_ID, '_rcp_stripe_sub_cancelled', true ) ) : ?>
-					<input id="restart-subscription" type="submit" class="cancel" name="submit_subscription_restart" value="Restart Payments"/>
-				<?php else: ?>
-					<input id="end-subscription" type="submit" class="cancel" name="submit_subscription_end" value="End Payments"/>
-				<?php endif; ?>
-				<button class="cancel" id="nevermind">Never Mind</button>
+			<input type="hidden" name="cus_id" value="<?php echo $stripe_id; ?>"/>
+			<input type="hidden" name="update_subscription" value="1"/>
+			<input id="edit-subscription" type="submit" class="update" name="submit_subscription_edit" value="Update"/>
+			<?php if( ! rcp_is_recurring( $user_ID ) && get_user_meta( $user_ID, '_rcp_stripe_sub_cancelled', true ) ) : ?>
+				<input id="restart-subscription" type="submit" class="cancel" name="submit_subscription_restart" value="Restart Payments"/>
+			<?php endif; ?>
 		</form>
 		<script type="text/javascript">
 			var rcp_stripe_vars;
