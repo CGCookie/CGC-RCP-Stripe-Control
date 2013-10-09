@@ -128,7 +128,7 @@ function cgc_rcp_sub_control_shortcode() {
 
 			jQuery(document).ready(function($) {
 
-				var current_sub_id = $('#subscription_options_menu select').val();
+				var current_sub_id = $('#current_sub_id').val();
 
 				// Toggle subscription edit
 				$('.toggle-subscription-edit').click(function(e) {
@@ -215,6 +215,7 @@ function cgc_rcp_sub_control_shortcode() {
 			</div>
 
 			<input type="hidden" name="cus_id" value="<?php echo $stripe_id; ?>"/>
+			<input type="hidden" id="current_sub_id" name="current_sub_id" value="<?php echo rcp_get_subscription_id( $user_ID ); ?>"/>
 			<input type="hidden" name="update_subscription" value="1"/>
 			<input id="edit-subscription" type="submit" class="update" name="submit_subscription_edit" value="Update"/>
 			<?php if( ! rcp_is_recurring( $user_ID ) && get_user_meta( $user_ID, '_rcp_stripe_sub_cancelled', true ) ) : ?>
