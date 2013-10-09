@@ -87,14 +87,15 @@ function cgc_rcp_sub_control_shortcode() {
 					<span>My Subscription: </span>
 					<span class="level-name"><?php echo $current_level->name; ?></span>
 				</div>
-				<div class="level-price">
+				<?php if( $current_level->name == 'Lifetime' ) { $display = ' style="display:none;"'; } ?>
+				<div class="level-price"<?php echo $display; ?>>
 					<span>Amount: </span>
 					<span class="amount">
 						<span>$<?php echo rcp_get_subscription_price( $current_level->id ); ?> </span>
 						<span>for <?php echo $current_level->duration . ' ' . rcp_filter_duration_unit( $current_level->duration_unit, $current_level->duration ); ?></span>
 					</span>
 				</div>
-				<div class="next-pay-date">
+				<div class="next-pay-date"<?php echo $display; ?>>
 					<span>Next payment date: </span>
 					<span class="payment-date"><?php echo rcp_get_expiration_date( $user_ID ); ?></span>
 				</div>
