@@ -489,6 +489,9 @@ function cgc_rcp_process_sub_changes() {
 			$customer->updateSubscription( array( 'plan' => $plan_id, 'prorate' => true ) );
 			delete_user_meta( $user_id, '_rcp_stripe_sub_cancelled' );
 			update_user_meta( $user_id, 'rcp_recurring', 'yes' );
+			update_user_meta( $user_id, 'rcp_subscription_level', absint( $_POST['subscription_level'] ) );
+			$exp = rcp_calc_member_expiration( rcp_get_subscription_details( absint( $_POST['subscription_level'] ) ) );
+			update_user_meta( $user_id, 'rcp_expiration', $exp );
 
 			wp_redirect( home_url( '/settings/?message=3#subscription' ) ); exit;
 
