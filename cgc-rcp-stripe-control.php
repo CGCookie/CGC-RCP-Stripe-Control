@@ -173,7 +173,7 @@ function cgc_rcp_sub_control_shortcode() {
 						if( response == 'valid' ) {
 							form$.get(0).submit();
 						} else {
-							alert( 'The password you entered is incorrect' );
+							$('#pass').append( '<div class="error">The password you entered is incorrect.</div>');
 						}
 					});
 				})
@@ -245,11 +245,11 @@ function cgc_rcp_sub_control_shortcode() {
 				<div id="sub-edit-confirm-modal" class="reveal-modal">
 					<label for="pass">Enter your password</label>
 					<input type="password" id="pass" name="pass" value=""/>
-
 					<input type="hidden" name="cus_id" value="<?php echo $stripe_id; ?>"/>
 					<input type="hidden" id="current_sub_id" name="current_sub_id" value="<?php echo rcp_get_subscription_id( $user_ID ); ?>"/>
 					<input type="hidden" name="update_subscription" value="1"/>
 					<input id="edit-subscription" type="submit" class="update" name="submit_subscription_edit" value="Update"/>
+					<a href="#" class="close-reveal-modal button cancel">Nevermind</a>
 				</div>
 			</div>
 		</form>
