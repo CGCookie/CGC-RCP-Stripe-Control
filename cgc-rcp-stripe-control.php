@@ -405,7 +405,7 @@ function cgc_rcp_process_sub_changes() {
 		$action = 'cancel';
 	} elseif( $action == 10 ) {
 		$action = 'upgrade_to_lifetime';
-	} elseif( $action && ( ! rcp_is_recurring( $user_id ) || ! rcp_is_active( $user_id ) ) {
+	} elseif( $action && ( ! rcp_is_recurring( $user_id ) || ! rcp_is_active( $user_id ) ) ) {
 		$action = 'restart';
 	} elseif( $action ) {
 		$action = 'edit';
