@@ -443,6 +443,20 @@ function cgc_rcp_process_sub_changes() {
 
 			$customer->cancelSubscription( array( 'at_period_end' => false ) );
 
+			Stripe_InvoiceItem::create( array(
+					'customer'    => $customer->id,
+					'amount'      => 630 * 100,
+					'currency'    => 'usd',
+					'description' => 'CG Cookie Lifetime Citizen Upgrade'
+				)
+			);
+
+			// Create the invoice containing taxes / discounts / fees
+			$invoice = Stripe_Invoice::create( array(
+				'customer' => $customer->id, // the customer to apply the fee to
+			) );
+			$invoice->pay();
+
 			// the subscription is not cancelled until period comes to an end
 			update_user_meta( $user_id, '_rcp_stripe_sub_cancelled', 'yes' );
 			update_user_meta( $user_id, 'rcp_recurring', 'no' );
