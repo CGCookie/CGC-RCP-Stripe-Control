@@ -250,7 +250,7 @@ function cgc_rcp_sub_control_shortcode() {
 						<?php // Now output hidden values ?>
 						<?php foreach( $levels as $level ) : ?>
 							<?php if( $level->price == 0 ) { continue; } ?>
-							<input type="hidden" id="subscription_price_<?php echo $level->id; ?>" value="$<?php echo rcp_get_subscription_price( $level->id ); ?> for every <?php echo $level->duration . ' ' . rcp_filter_duration_unit( $level->duration_unit, $level->duration ); ?>"/>
+							<input type="hidden" id="subscription_price_<?php echo $level->id; ?>" value="$<?php echo rcp_get_subscription_price( $level->id ); ?> for <?php echo $level->duration . ' ' . rcp_filter_duration_unit( $level->duration_unit, $level->duration ); ?>"/>
 							<input type="hidden" id="subscription_expiration_<?php echo $level->id; ?>" value="<?php echo date( 'F j, Y', strtotime( rcp_calc_member_expiration( $level ) ) ); ?>"/>
 						<?php endforeach; ?>
 					</div>
@@ -258,11 +258,15 @@ function cgc_rcp_sub_control_shortcode() {
 						<span>Amount: </span>
 						<span class="amount">
 							<span>$<?php echo rcp_get_subscription_price( rcp_get_subscription_id( $user_ID ) ); ?> </span>
-							<span>for every <?php echo $current_level->duration . ' ' . rcp_filter_duration_unit( $current_level->duration_unit, $current_level->duration ); ?></span>
+							<span>for <?php echo $current_level->duration . ' ' . rcp_filter_duration_unit( $current_level->duration_unit, $current_level->duration ); ?></span>
 						</span>
 					</div>
 					<div class="next-pay-date">
+						<?php if( rcp_is_recurring( $user_ID ) ) : ?>
 						<span>Next payment date: </span>
+						<?php else : ?>
+						<span>Expiration date: </span>
+						<?php endif; ?>
 						<span class="payment-date"><?php echo rcp_get_expiration_date( $user_ID ); ?></span>
 					</div>
 
