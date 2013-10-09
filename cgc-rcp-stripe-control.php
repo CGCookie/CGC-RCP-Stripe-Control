@@ -155,6 +155,11 @@ function cgc_rcp_sub_control_shortcode() {
 					$('#subscription_details .payment-date').text( exp );
 				});
 
+				$('#sub-edit-submit').click(function(e) {
+					e.preventDefault();
+					$("#sub-edit-confirm-modal").reveal("open");
+				});
+
 				// Subscription edit submission
 				$('#cgc_rcp_subscription').submit(function(e) {
 					e.preventDefault();
@@ -234,13 +239,18 @@ function cgc_rcp_sub_control_shortcode() {
 			</div>
 
 			<div id="submit-wrap" style="display:none">
-				<label for="pass">Enter your password</label>
-				<input type="password" id="pass" name="pass" value=""/>
 
-				<input type="hidden" name="cus_id" value="<?php echo $stripe_id; ?>"/>
-				<input type="hidden" id="current_sub_id" name="current_sub_id" value="<?php echo rcp_get_subscription_id( $user_ID ); ?>"/>
-				<input type="hidden" name="update_subscription" value="1"/>
-				<input id="edit-subscription" type="submit" class="update" name="submit_subscription_edit" value="Update"/>
+				<button id="sub-edit-submit">Update</button>
+
+				<div id="sub-edit-confirm-modal" class="reveal-modal">
+					<label for="pass">Enter your password</label>
+					<input type="password" id="pass" name="pass" value=""/>
+
+					<input type="hidden" name="cus_id" value="<?php echo $stripe_id; ?>"/>
+					<input type="hidden" id="current_sub_id" name="current_sub_id" value="<?php echo rcp_get_subscription_id( $user_ID ); ?>"/>
+					<input type="hidden" name="update_subscription" value="1"/>
+					<input id="edit-subscription" type="submit" class="update" name="submit_subscription_edit" value="Update"/>
+				</div>
 			</div>
 		</form>
 		<h3>Your Stored Card Info</h3>
