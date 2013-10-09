@@ -172,7 +172,7 @@ function cgc_rcp_sub_control_shortcode() {
 						var message = 'Your subscription will be changed from ' + current_level + ' to ' + new_level + '. You will now be billed ' + price + '. Click Update below to confirm the change to your subscription.';
 					}
 
-					if( new_level == 'Cancel Subscription' ) {
+					if( new_level == 'Cancel Subscription' || new_level == 'Lifetime' ) {
 						$('#subscription_details .level-price, #subscription_details .next-pay-date').hide();
 					} else {
 
