@@ -98,7 +98,7 @@ function cgc_rcp_sub_control_shortcode() {
 	<?php elseif( rcp_stripe_is_customer( $user_ID ) ) : ?>
 
 		<script type="text/javascript">
-			var rcp_stripe_vars;
+			var rcp_stripe_vars, cgc_scripts;
 
 			// this identifies your website in the createToken call below
 			Stripe.setPublishableKey('<?php echo $publishable_key; ?>');
@@ -154,6 +154,23 @@ function cgc_rcp_sub_control_shortcode() {
 					$('#subscription_details .level-price .amount').text( price );
 					$('#subscription_details .payment-date').text( exp );
 				});
+
+				// Subscription edit submission
+				$('#cgc_rcp_subscription').submit(function(e) {
+					e.preventDefault();
+					var form$ = $(this);
+					var data = {
+						action: 'validate_subscription_password',
+						pass: $(this).val()
+					};
+					$.post(cgc_scripts.ajaxurl, data, function(response) {
+						if( response == 'valid' ) {
+							form$.get(0).submit();
+						} else {
+							alert( 'The password you entered is incorrect' );
+						}
+					});
+				})
 
 				// Change active card form
 				$("#rcp_update_card").on('click', function(event) {
@@ -223,9 +240,6 @@ function cgc_rcp_sub_control_shortcode() {
 				<input type="hidden" id="current_sub_id" name="current_sub_id" value="<?php echo rcp_get_subscription_id( $user_ID ); ?>"/>
 				<input type="hidden" name="update_subscription" value="1"/>
 				<input id="edit-subscription" type="submit" class="update" name="submit_subscription_edit" value="Update"/>
-				<?php if( ! rcp_is_recurring( $user_ID ) && get_user_meta( $user_ID, '_rcp_stripe_sub_cancelled', true ) ) : ?>
-					<input id="restart-subscription" type="submit" class="cancel" name="submit_subscription_restart" value="Restart Payments"/>
-				<?php endif; ?>
 			</div>
 		</form>
 		<h3>Your Stored Card Info</h3>
@@ -384,3 +398,19 @@ function cgc_rcp_process_sub_changes() {
 
 }
 add_action( 'init', 'cgc_rcp_process_sub_changes' );
+
+function cgc_rcp_check_password() {
+	if( ! isset( $_POST['pass'] ) )
+		die( '-1' );
+
+	$user = get_userdata( get_current_user_id() );
+
+	if( ! $user )
+		die( '-1' );
+
+	if( wp_check_password( $_POST['pass'], $user->user_pass, $user->ID ) )
+		die( 'valid' );
+
+	die( '0' );
+}
+add_action( 'wp_ajax_validate_subscription_password', 'cgc_rcp_check_password' );
