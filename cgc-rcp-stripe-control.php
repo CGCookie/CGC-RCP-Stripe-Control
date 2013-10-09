@@ -102,7 +102,7 @@ function cgc_rcp_sub_control_shortcode() {
 						$levels = rcp_get_subscription_levels( 'active' );
 						$current_level = rcp_get_subscription_details( rcp_get_subscription_id( $user_ID ) );
 						?>
-						<label>My Subscription: </label>
+						<span>My Subscription: </span>
 
 						<span class="level-name"><?php echo rcp_get_subscription( $user_ID ); ?></span>
 
@@ -121,10 +121,10 @@ function cgc_rcp_sub_control_shortcode() {
 						<?php endforeach; ?>
 					</div>
 					<div class="level-price">
-						<label>Amount: </label>
+						<span>Amount: </span>
 						<span class="amount">
 							<span>$<?php echo rcp_get_subscription_price( rcp_get_subscription_id( $user_ID ) ); ?> </span>
-							<span>for <?php echo rcp_filter_duration_unit( $current_level->duration_unit, $current_level->duration ); ?></span>
+							<span>for <?php echo $current_level->duration . ' ' . rcp_filter_duration_unit( $current_level->duration_unit, $current_level->duration ); ?></span>
 						</span>
 					</div>
 					<div class="next-pay-date">
