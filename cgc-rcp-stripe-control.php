@@ -148,11 +148,16 @@ function cgc_rcp_sub_control_shortcode() {
 
 				// Update price and payment due date when changing subscriptions
 				$('#subscription_options_menu select').change(function() {
-					var sub_id = $(this).val();
-					var price = $('#subscription_price_' + sub_id).val();
-					var exp   = $('#subscription_expiration_' + sub_id).val();
+					var sub_id  = $(this).val();
+					var price   = $('#subscription_price_' + sub_id).val();
+					var exp     = $('#subscription_expiration_' + sub_id).val();
+					var message = 'Your subscription will be changed from ' + current_level + ' to ' + new_level '. You will now be billed ' + price;
+
 					$('#subscription_details .level-price .amount').text( price );
 					$('#subscription_details .payment-date').text( exp );
+
+					$('#sub-update-message').text( message ).slideDown();
+
 				});
 
 				$('#sub-edit-submit').click(function(e) {
@@ -235,6 +240,11 @@ function cgc_rcp_sub_control_shortcode() {
 						<span>Next payment date: </span>
 						<span class="payment-date"><?php echo rcp_get_expiration_date( $user_ID ); ?></span>
 					</div>
+
+					<div id="sub-update-message" style="display:none;">
+						<!--filled via jQuery-->
+					</div>
+
 				</div>
 			</div>
 
