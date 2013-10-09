@@ -116,12 +116,8 @@ function cgc_rcp_sub_control_shortcode() {
 						<?php // Now output hidden values ?>
 						<?php foreach( $levels as $level ) : ?>
 							<?php if( $level->price == 0 ) { continue; } ?>
-							<span id="subscription_price_<?php echo $level->id; ?>">
-								$<?php echo rcp_get_subscription_price( rcp_get_subscription_id( $user_ID ) ); ?>
-							</span>
-							<span id="subscription_expiration_<?php echo $level->id; ?>">
-								<?php echo date( 'F j, Y', strtotime( rcp_calc_member_expiration( $level ) ) ); ?>
-							</span>
+							<input type="hidden" id="subscription_price_<?php echo $level->id; ?>" value="$<?php echo rcp_get_subscription_price( rcp_get_subscription_id( $user_ID ) ); ?>"/>
+							<input type="hidden" id="subscription_expiration_<?php echo $level->id; ?>" value="<?php echo date( 'F j, Y', strtotime( rcp_calc_member_expiration( $level ) ) ); ?>"/>
 						<?php endforeach; ?>
 					</div>
 					<div class="level-price">
