@@ -129,8 +129,9 @@ function cgc_rcp_sub_control_shortcode() {
 			jQuery(document).ready(function($) {
 
 				// Modify subscription
-				$('#edit-subscription').click(function(e) {
+				$('.toggle-subscription-edit').click(function(e) {
 					e.preventDefault();
+					$('.toggle-subscription-edit').toggle();
 					$('#subscription_details .level-name, #subscription_options_menu').toggle();
 				});
 
@@ -154,7 +155,8 @@ function cgc_rcp_sub_control_shortcode() {
 
 		<form id="cgc_rcp_subscription" method="post">
 			<div id="cgc_subscription_overview">
-				<button id="edit-subscription">Modify Subscription</button>
+				<button id="edit-subscription" class="toggle-subscription-edit">Modify Subscription</button>
+				<button id="cancel-edit-subscription" class="toggle-subscription-edit" style="display:none">Nevermind</button>
 				<div id="subscription_details">
 					<div class="level">
 						<?php $levels = rcp_get_subscription_levels( 'active' ); ?>
