@@ -356,7 +356,7 @@ function cgc_rcp_process_sub_changes() {
 	$plan     = rcp_get_subscription_details( absint( $_POST['subscription_level'] ) );
 	$plan_id  = strtolower( str_replace( ' ', '', $plan->name ) );
 
-	if( wp_check_password( $_POST['pass'], $user->user_pass, $user->ID ) ) {
+	if( ! wp_check_password( $_POST['pass'], $user->user_pass, $user->ID ) ) {
 		wp_redirect( home_url( '/settings/?message=5#subscription' ) ); exit;
 	}
 
