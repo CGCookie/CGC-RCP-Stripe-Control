@@ -128,12 +128,22 @@ function cgc_rcp_sub_control_shortcode() {
 
 			jQuery(document).ready(function($) {
 
+				var current_sub_id = $('#subscription_options_menu select').val();
+
 				// Toggle subscription edit
 				$('.toggle-subscription-edit').click(function(e) {
 					e.preventDefault();
 					$('.toggle-subscription-edit').toggle();
 					$('#subscription_details .level-name, #subscription_options_menu').toggle();
 				});
+
+				$('#cancel-edit-subscription').click(function(e) {
+					e.preventDefault();
+					var price = $('#subscription_price_' + current_sub_id).val();
+					var exp   = $('#subscription_expiration_' + current_sub_id).val();
+					$('#subscription_details .level-price .amount').text( price );
+					$('#subscription_details .payment-date').text( exp );
+				})
 
 				// Update price and payment due date when changing subscriptions
 				$('#subscription_options_menu select').change(function() {
