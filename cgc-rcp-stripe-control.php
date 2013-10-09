@@ -408,8 +408,9 @@ function cgc_rcp_check_password() {
 	if( ! $user )
 		die( '-1' );
 
-	if( wp_check_password( $_POST['pass'], $user->user_pass, $user->ID ) )
-		die( 'valid' );
+	if( wp_check_password( $_POST['pass'], $user->user_pass, $user->ID ) ) {
+		echo 'valid'; exit;
+	}
 
 	die( '0' );
 }
