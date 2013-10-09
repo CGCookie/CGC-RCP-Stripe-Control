@@ -308,55 +308,55 @@ function cgc_rcp_sub_control_shortcode() {
 					</div>
 				</div>
 			</form>
-		<?php endif; ?>
-		<h3>Your Stored Card Info</h3>
+			<h3>Your Stored Card Info</h3>
 
-		<ul id="rcp_stripe_card_info">
-			<?php $card = $stripe_customer->cards->retrieve( $stripe_customer->default_card ); ?>
-			<li>Type: <strong><?php echo $card->type; ?></strong></li>
-			<li>Name on the card: <strong><?php echo $card->name; ?></strong></li>
-			<li>Last four digits: <strong><?php echo $card->last4; ?></strong></li>
-			<li>Expiration: <strong><?php echo $card->exp_month . ' / ' . $card->exp_year; ?></strong></li>
-		</ul>
+			<ul id="rcp_stripe_card_info">
+				<?php $card = $stripe_customer->cards->retrieve( $stripe_customer->default_card ); ?>
+				<li>Type: <strong><?php echo $card->type; ?></strong></li>
+				<li>Name on the card: <strong><?php echo $card->name; ?></strong></li>
+				<li>Last four digits: <strong><?php echo $card->last4; ?></strong></li>
+				<li>Expiration: <strong><?php echo $card->exp_month . ' / ' . $card->exp_year; ?></strong></li>
+			</ul>
 
-		<h3>Update Your Stored Card</h3>
-		<form id="rcp_stripe_card_form" class="rcp_form" action="" method="POST">
-			<div class="card-errors"></div>
-			<p>
-		        <label>Name on the Card</label>
-		        <input type="text" size="20" autocomplete="off" class="card-name" />
-		    </p>
-			<p>
-		        <label>Card Number</label>
-		        <input type="text" size="20" autocomplete="off" class="card-number" />
-		    </p>
-		    <p>
-		        <label>CVC</label>
-		        <input type="text" size="4" autocomplete="off" class="card-cvc" />
-		    </p>
-		    <p>
-		    	<select class="card-expiry-month">
-					<?php for( $i = 1; $i <= 12; $i++ ) : ?>
-						<option value="<?php echo $i; ?>"><?php echo $i . ' - ' . rcp_get_month_name( $i ); ?></option>
-					<?php endfor; ?>
-				</select>
-				<span> / </span>
-				<select class="card-expiry-year">
-					<?php
-					$year = date( 'Y' );
-					for( $i = $year; $i <= $year + 10; $i++ ) : ?>
-						<option value="<?php echo $i; ?>"><?php echo $i; ?></option>
-					<?php endfor; ?>
-				</select>
-		    </p>
-			<p>
-				<input type="hidden" name="rcp_card_action" value="update"/>
-				<input type="hidden" name="rcp_customer_id" value="<?php echo $stripe_customer->id; ?>"/>
-				<input type="hidden" name="rcp_card_nonce" value="<?php echo wp_create_nonce('rcp-card-nonce'); ?>"/>
-				<input type="submit" id="rcp_update_card" value="Save Card Info"/>
-			</p>
-			<p><img src="<?php echo RCP_STRIPE_URL; ?>/images/loading.gif" style="display:none;" id="rcp_ajax_loading"/></p>
-		</form>
+			<h3>Update Your Stored Card</h3>
+			<form id="rcp_stripe_card_form" class="rcp_form" action="" method="POST">
+				<div class="card-errors"></div>
+				<p>
+			        <label>Name on the Card</label>
+			        <input type="text" size="20" autocomplete="off" class="card-name" />
+			    </p>
+				<p>
+			        <label>Card Number</label>
+			        <input type="text" size="20" autocomplete="off" class="card-number" />
+			    </p>
+			    <p>
+			        <label>CVC</label>
+			        <input type="text" size="4" autocomplete="off" class="card-cvc" />
+			    </p>
+			    <p>
+			    	<select class="card-expiry-month">
+						<?php for( $i = 1; $i <= 12; $i++ ) : ?>
+							<option value="<?php echo $i; ?>"><?php echo $i . ' - ' . rcp_get_month_name( $i ); ?></option>
+						<?php endfor; ?>
+					</select>
+					<span> / </span>
+					<select class="card-expiry-year">
+						<?php
+						$year = date( 'Y' );
+						for( $i = $year; $i <= $year + 10; $i++ ) : ?>
+							<option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+						<?php endfor; ?>
+					</select>
+			    </p>
+				<p>
+					<input type="hidden" name="rcp_card_action" value="update"/>
+					<input type="hidden" name="rcp_customer_id" value="<?php echo $stripe_customer->id; ?>"/>
+					<input type="hidden" name="rcp_card_nonce" value="<?php echo wp_create_nonce('rcp-card-nonce'); ?>"/>
+					<input type="submit" id="rcp_update_card" value="Save Card Info"/>
+				</p>
+				<p><img src="<?php echo RCP_STRIPE_URL; ?>/images/loading.gif" style="display:none;" id="rcp_ajax_loading"/></p>
+			</form>
+		<?php endif; // End lifetime check ?>
 	<?php endif; // End Stripe customer check ?>
 
 	<?php if( class_exists( 'RCP_Payments' ) ) : ?>
