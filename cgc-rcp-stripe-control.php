@@ -228,7 +228,12 @@ function cgc_rcp_sub_control_shortcode() {
 
 		<form id="cgc_rcp_subscription" method="post">
 			<div id="cgc_subscription_overview">
-				<button id="edit-subscription" class="toggle-subscription-edit">Modify Subscription</button>
+				<button id="edit-subscription" class="toggle-subscription-edit">
+					<?php if( rcp_is_recurring( $user_ID ) ) : ?>
+						Modify Subscription</button>
+					<?php else : ?>
+						Restart Subscription
+					<?php endif; ?>
 				<button id="cancel-edit-subscription" class="toggle-subscription-edit" style="display:none">Nevermind</button>
 				<div id="subscription_details">
 					<div class="level">
@@ -243,7 +248,9 @@ function cgc_rcp_sub_control_shortcode() {
 									<?php if( $level->price == 0 ) { continue; } ?>
 									<option value="<?php echo $level->id; ?>"<?php selected( $level->id, $current_level->id ); ?>><?php echo $level->name; ?></option>
 								<?php endforeach; ?>
-								<option value="x">Cancel Subscription</option>
+								<?php if( rcp_is_recurring( $user_ID ) ) : ?>
+									<option value="x">Cancel Subscription</option>
+								<?php endif; ?>
 							</select>
 						</div>
 
@@ -398,7 +405,7 @@ function cgc_rcp_process_sub_changes() {
 		$action = 'cancel';
 	} elseif( $action == 10 ) {
 		$action = 'upgrade_to_lifetime';
-	} elseif( $action == 'restart' ) {
+	} elseif( $action && ( ! rcp_is_recurring( $user_id ) || ! rcp_is_active( $user_id ) ) {
 		$action = 'restart';
 	} elseif( $action ) {
 		$action = 'edit';
