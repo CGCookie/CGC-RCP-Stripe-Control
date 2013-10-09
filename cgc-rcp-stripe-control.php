@@ -120,7 +120,7 @@ function cgc_rcp_sub_control_shortcode() {
 								$<?php echo rcp_get_subscription_price( rcp_get_subscription_id( $user_ID ) ); ?>
 							</span>
 							<span id="subscription_expiration_<?php echo $level->id; ?>">
-								<?php echo date( 'F j, Y', strtotime( rcp_calc_member_expiration( $level ) ); ?>
+								<?php echo date( 'F j, Y', strtotime( rcp_calc_member_expiration( $level ) ) ); ?>
 							</span>
 						<?php endforeach; ?>
 					</div>
