@@ -102,9 +102,7 @@ function cgc_rcp_sub_control_shortcode() {
 				<button id="edit-subscription">Modify Subscription</button>
 				<div id="subscription_details">
 					<div class="level">
-						<?php
-						$levels = rcp_get_subscription_levels( 'active' );
-						?>
+						<?php $levels = rcp_get_subscription_levels( 'active' ); ?>
 						<span>My Subscription: </span>
 
 						<span class="level-name"><?php echo rcp_get_subscription( $user_ID ); ?></span>
@@ -243,8 +241,23 @@ function cgc_rcp_sub_control_shortcode() {
 		</form>
 	<?php endif; // End Stripe customer check ?>
 
-	<h3>Payment History</h3>
-	<?php echo rcp_print_user_payments( $user_ID ); ?>
+	<?php if( class_exists( 'RCP_Payments' ) ) : ?>
+		<h3>Payment History</h3>
+		<?php
+		$payments_db = new RCP_Payments;
+		$payments = $payments_db->get_payments( array( 'user_id' => $user_id ) );
+		if( $payments ) :
+			foreach( $payments as $payment ) :
+				echo '<div class="member_payment">';
+					echo '<span class="payment-date">' . date( 'F j, Y', strtotime( $payment->date ) ) . '</span>';
+					echo '<span class="payment-duration">' . $payment->subscription . '</span>';
+					echo '<span class="payment-amount">$' . number_format( $payment->amount, 2 ) . '</span>';
+				echo '</div>';
+			endforeach;
+		endif;
+
+		?>
+	<?php endif; ?>
 	<p>Billing trouble? <a href="#">Contact support</a>.</p>
 <?php
 }
