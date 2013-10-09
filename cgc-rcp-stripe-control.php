@@ -326,6 +326,7 @@ function cgc_rcp_process_sub_changes() {
 		return;
 
 	$user_id = get_current_user_id();
+	$user    = get_userdata( $user_id );
 	$customer_id = rcp_get_stripe_customer_id( $user_id );
 
 	// Ensure the posted customer ID matches the ID stored for the currently logged-in user
@@ -354,6 +355,10 @@ function cgc_rcp_process_sub_changes() {
 	$customer = Stripe_Customer::retrieve( $customer_id );
 	$plan     = rcp_get_subscription_details( absint( $_POST['subscription_level'] ) );
 	$plan_id  = strtolower( str_replace( ' ', '', $plan->name ) );
+
+	if( wp_check_password( $_POST['pass'], $user->user_pass, $user->ID ) ) {
+		wp_redirect( home_url( '/settings/?message=5#subscription' ) ); exit;
+	}
 
 	switch( $action ) {
 
