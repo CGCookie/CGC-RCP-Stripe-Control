@@ -153,7 +153,18 @@ function cgc_rcp_sub_control_shortcode() {
 					var exp     = $('#subscription_expiration_' + sub_id).val();
 					var current_level = $('#current_sub_name').val();
 					var new_level     = $('#subscription_options_menu select option:selected').text();
-					var message = 'Your subscription will be changed from ' + current_level + ' to ' + new_level + '. You will now be billed ' + price + '. Click Update below to confirm the change to your subscription.';
+
+					if( new_level == 'Lifetime' ) {
+
+						var message = 'Your subscription will be changed from ' + current_level + ' to ' + new_level + '. You will be billed $630 immediately but will never be billed again. Note, your current subscription will be cancelled and you will receive an email alerting you of the cancellation, then you will receive a second email alerting you of the Lifetime activation. Click Update below to confirm the change to your subscription.';
+
+					} else if ( new_level == 'Cancel Subscription' ) {
+
+						var message = 'Your subscription payments will be cancelled immediately but you will retain access to all Citizen content until the end of term, ' + exp;
+
+					} else {
+						var message = 'Your subscription will be changed from ' + current_level + ' to ' + new_level + '. You will now be billed ' + price + '. Click Update below to confirm the change to your subscription.';
+					}
 
 					$('#subscription_details .level-price .amount').text( price );
 					$('#subscription_details .payment-date').text( exp );
