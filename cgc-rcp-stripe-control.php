@@ -26,20 +26,6 @@ function cgc_rcp_sub_control_shortcode() {
 
 	$current_level = rcp_get_subscription_details( rcp_get_subscription_id( $user_ID ) );
 
-	$stripe_id = rcp_get_stripe_customer_id( $user_ID );
-
-	if( isset( $rcp_options['stripe_test_mode'] ) ) {
-		$secret_key = trim( $rcp_options['stripe_test_secret'] );
-		$publishable_key = trim( $rcp_options['stripe_test_publishable'] );
-	} else {
-		$secret_key = trim( $rcp_options['stripe_live_secret'] );
-		$publishable_key = trim( $rcp_options['stripe_live_publishable'] );
-	}
-
-	Stripe::setApiKey( $secret_key );
-	$stripe_customer = Stripe_Customer::retrieve( $stripe_id );
-
-
 	if( isset( $_GET['message'] ) ) : ?>
 	<div id="cgc_subscription_messages">
 		<?php
@@ -104,6 +90,21 @@ function cgc_rcp_sub_control_shortcode() {
 			<?php endif; ?>
 		</div>
 	<?php elseif( rcp_stripe_is_customer( $user_ID ) ) : ?>
+
+		<?php
+		$stripe_id = rcp_get_stripe_customer_id( $user_ID );
+
+		if( isset( $rcp_options['stripe_test_mode'] ) ) {
+			$secret_key = trim( $rcp_options['stripe_test_secret'] );
+			$publishable_key = trim( $rcp_options['stripe_test_publishable'] );
+		} else {
+			$secret_key = trim( $rcp_options['stripe_live_secret'] );
+			$publishable_key = trim( $rcp_options['stripe_live_publishable'] );
+		}
+
+		Stripe::setApiKey( $secret_key );
+		$stripe_customer = Stripe_Customer::retrieve( $stripe_id );
+		?>
 
 		<script type="text/javascript">
 			var rcp_stripe_vars, cgc_scripts;
