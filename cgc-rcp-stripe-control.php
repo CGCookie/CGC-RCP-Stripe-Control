@@ -87,6 +87,10 @@ function cgc_rcp_sub_control_shortcode() {
 						<span class="payment-date"><?php echo rcp_get_expiration_date( $user_ID ); ?></span>
 					</li>
 				</ul>
+				<p>If you wish to cancel your PayPal subscription, click the link below, log into your PayPal account, navigate to Profile > My Money > My Preapproved Payments and locate the subscription for CG Cookie.</p>
+				<p class="paypal-cancel">
+					<a href="https://www.paypal.com/cgi-bin/customerprofileweb?cmd=_manage-paylist" target="_blank">Cancel Subscription</a>
+				</p>
 			<?php endif; ?>
 		</div>
 	<?php elseif( rcp_stripe_is_customer( $user_ID ) ) : ?>
