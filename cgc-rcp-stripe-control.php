@@ -229,7 +229,7 @@ function cgc_rcp_sub_control_shortcode() {
 						number: $('.card-number').val(),
 						cvc: $('.card-cvc').val(),
 						exp_month: $('.card-expiry-month').val(),
-						exp_year: $('.card-expiry-year').val()
+						exp_year: $('.card-expiry-year').val(),
 						address_zip: $('.card-zip').val()
 					}, stripeResponseHandler);
 					return false; // submit from callback
