@@ -222,6 +222,7 @@ function cgc_rcp_sub_control_shortcode() {
 						cvc: $('.card-cvc').val(),
 						exp_month: $('.card-expiry-month').val(),
 						exp_year: $('.card-expiry-year').val()
+						address_zip: $('.card-zip').val()
 					}, stripeResponseHandler);
 					return false; // submit from callback
 				});
@@ -346,6 +347,10 @@ function cgc_rcp_sub_control_shortcode() {
 							<option value="<?php echo $i; ?>"><?php echo $i; ?></option>
 						<?php endfor; ?>
 					</select>
+			    </p>
+			    <p>
+			        <label>Zip / Postal Code</label>
+			        <input type="text" size="4" autocomplete="off" class="card-zip" />
 			    </p>
 				<p>
 					<input type="hidden" name="rcp_card_action" value="update"/>
