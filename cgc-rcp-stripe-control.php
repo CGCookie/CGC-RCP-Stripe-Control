@@ -219,14 +219,6 @@ function cgc_rcp_sub_control_shortcode() {
 					});
 				});
 
-				$('.update-toggle').click(function(e){
-					e.preventDefault();
-					var $this = $(this);
-					$this.parent().toggleClass('expanded');
-					$this.hide();
-					$this.siblings('.update-toggle').toggle();
-				});
-
 				// Change active card form
 				$("#rcp_update_card").on('click', function(event) {
 
