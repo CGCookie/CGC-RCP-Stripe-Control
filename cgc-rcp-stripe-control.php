@@ -402,7 +402,7 @@ function cgc_rcp_sub_control_shortcode() {
 
 		?>
 	<?php endif; ?>
-	<p>Billing trouble? <a href="#">Contact support</a>.</p>
+	<p>Billing trouble? <a href="#" onClick="script: Zenbox.show(); return false;">Contact support</a>.</p>
 <?php
 }
 
