@@ -268,7 +268,7 @@ function cgc_rcp_sub_control_shortcode() {
 					var exp     = $('#subscription_expiration_' + sub_id).val();
 					var currrent_exp  = $('#subscription_expiration_' + current_sub_id).val();
 					var current_level = $('#current_sub_name').val();
-					var new_level     = $('#subscription_options_menu input:checked').find('.sub_level_name').text();
+					var new_level     = $('#subscription_options_menu input:checked').next().find('.sub_level_name').text();
 
 					if( new_level == 'Lifetime' ) {
 
