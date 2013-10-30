@@ -14,6 +14,83 @@
  *
  */
 
+function cgc_rcp_process_free_signup() {
+
+	$user_email = sanitize_text_field( $_POST['rcp_user_email'] );
+	$user_login = sanitize_text_field( $_POST['rcp_user_login'] );
+	$user_pass  = sanitize_text_field( $_POST['rcp_user_pass'] );
+	$user_pass2 = sanitize_text_field( $_POST['rcp_user_pass_confirm'] );
+
+	if( ! empty( $_POST['cookie_jar'] ) ) {
+		rcp_errors()->add( 'bot', __( 'Nice try Mr. Robot', 'rcp' ), 'free_register' );
+	}
+
+	if( username_exists( $user_login ) ) {
+		// Username already registered
+		rcp_errors()->add( 'username_unavailable', __( 'Username already taken', 'rcp' ), 'free_register' );
+	}
+	if( ! validate_username( $user_login ) ) {
+		// invalid username
+		rcp_errors()->add( 'username_invalid', __( 'Invalid username', 'rcp' ), 'free_register' );
+	}
+	if( empty( $user_login ) ) {
+		// empty username
+		rcp_errors()->add( 'username_empty', __( 'Please enter a username', 'rcp' ), 'free_register' );
+	}
+	if( ! is_email( $user_email ) ) {
+		//invalid email
+		rcp_errors()->add( 'email_invalid', __( 'Invalid email', 'rcp' ), 'free_register' );
+	}
+	if( email_exists( $user_email ) ) {
+		//Email address already registered
+		rcp_errors()->add( 'email_used', __( 'Email already registered', 'rcp' ), 'free_register' );
+	}
+	if( empty( $user_pass ) ) {
+		// passwords is empty
+		rcp_errors()->add( 'password_empty', __( 'Please enter a password', 'rcp' ), 'free_register' );
+	}
+	if( empty( $user_pass2 ) ) {
+		// passwords is empty
+		rcp_errors()->add( 'password_confirm_empty', __( 'Please confirm your password', 'rcp' ), 'free_register' );
+	}
+
+	if( $user_pass2 !== $user_pass ) {
+		// passwords is empty
+		rcp_errors()->add( 'password_mismatch', __( 'Your passwords do not match', 'rcp' ), 'free_register' );
+	}
+
+	// retrieve all error messages, if any
+	$errors = rcp_errors()->get_error_messages();
+
+	// only create the user if there are no errors
+	if( empty( $errors ) ) {
+		$user_id = wp_insert_user( array(
+				'user_login'		=> $user_login,
+				'user_pass'	 		=> $user_pass,
+				'user_email'		=> $user_email,
+				'user_registered'	=> date( 'Y-m-d H:i:s' ),
+				'role'				=> 'subscriber'
+			)
+		);
+
+		$subscription_key = rcp_generate_subscription_key();
+		update_user_meta( $user_id, 'rcp_subscription_key', $subscription_key );
+		update_user_meta( $user_id, 'rcp_subscription_level', 1 );
+		rcp_set_status( $user_id, 'free' );
+
+		$creds = array();
+		$creds['user_login'] = $user_login;
+		$creds['user_password'] = $user_pass;
+		$creds['remember'] = false;
+		$user = wp_signon( $creds, false );
+		die('1');
+	} else {
+		echo rcp_show_error_messages( 'free_register' ); exit;
+	}
+	die('-1');
+}
+add_action( 'wp_ajax_nopriv_rcp_register_free', 'cgc_rcp_process_free_signup' );
+
 function cgc_rcp_force_auto_renew( $data ) {
 	$data['auto_renew'] = 1;
 	return $data;
