@@ -346,82 +346,91 @@ function cgc_rcp_sub_control_shortcode() {
 		<?php else : ?>
 			<form id="cgc_rcp_subscription" method="post">
 				<div id="cgc_subscription_overview">
-				<h4 class="setting-title">Your Subscription</h4>
-					<button id="edit-subscription" class="toggle-subscription-edit">
-						<?php if( rcp_is_recurring( $user_ID ) ) : ?>
-							<i class="icon-pencil"></i> Modify Subscription
-						<?php else : ?>
-							<i class="icon-refresh"></i> Restart Subscription
-						<?php endif; ?>
-						</button>
-					<button id="cancel-edit-subscription" class="toggle-subscription-edit" style="display:none"><i class="icon-remove"></i> Nevermind</button>
-					<ul id="subscription_details">
-						<li class="level">
-							<?php $levels = rcp_get_subscription_levels( 'active' ); ?>
-
-							<span>My Subscription: </span>
-
-							<span class="level-name level-value"><?php echo rcp_get_subscription( $user_ID ); ?></span>
-
-							<div id="subscription_options_menu" style="display:none;">
-								<select id="subscription_options" name="subscription_level" style="display:none;">
-									<?php foreach( $levels as $level ) : ?>
-										<?php if( $level->price == 0  ) { continue; } ?>
-										<option value="<?php echo $level->id; ?>"<?php selected( $level->id, $current_level->id ); ?>><?php echo $level->name; ?></option>
-									<?php endforeach; ?>
+					<table id="cgc_current_subscription">
+						<thead>
+							<tr>
+								<th>Current Subscription</th>
+								<th>Amount</th>
+								<th colspan="2">
 									<?php if( rcp_is_recurring( $user_ID ) ) : ?>
-										<option value="x">Cancel Subscription</option>
+									<span>Next Payment:</span>
+									<?php else : ?>
+									<span>Expiration:</span>
 									<?php endif; ?>
-								</select>
-							</div>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<span class="level-name level-value"><?php echo rcp_get_subscription( $user_ID ); ?></span>
+									<div id="subscription_options">
+										<span class="sub_level_current">
+											<span class="sub_level_current_name"><?php echo $current_level->name; ?></span>
+											<span class="sub_level_current_label">Current Plan</span>
+										</span>
+										<?php foreach( $levels as $level ) : ?>
+											<?php if( $level->price == 0 || $level->id == $current_level->id ) { continue; } ?>
+											<input type="radio" name="subscription_level" id="sub_level_<?php echo $level->id; ?>" value="<?php echo $level->id; ?>"/>
+											<label for="sub_level_<?php echo $level->id; ?>">
+												<?php echo $level->name; ?>
+												<span class="sub_level_description"><?php echo $level->description; ?></span>
+												<span class="sub_level_description">$<?php echo $level->price; ?>/<?php echo $level->duration_unit; ?></span>
+											</label>
+										<?php endforeach; ?>
+										<?php if( rcp_is_recurring( $user_ID ) ) : ?>
+											<input type="radio" id="sub_level_cancel" name="subscription_level" value="x">
+											<label for="sub_level_cancel">Cancel Citizen Subscription</label>
+										<?php endif; ?>
+									</div>
+								</td>
+								<td>
+									<span class="amount level-value">$<?php echo $current_level->price; ?>/mo</span>
+								</td>
+								<td>
+									<span class="payment-date level-value"><?php echo rcp_get_expiration_date( $user_ID ); ?></span>
+								</td>
+								<td>
+									<button id="edit-subscription" class="toggle-subscription-edit">
+										<i class="icon-pencil"></i> Edit
+									</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 
-							<?php // Now output hidden values ?>
-							<?php foreach( $levels as $level ) : ?>
-								<?php if( $level->price == 0 ) { continue; } ?>
-								<input type="hidden" id="subscription_price_<?php echo $level->id; ?>" value="$<?php echo rcp_get_subscription_price( $level->id ); ?> for <?php echo $level->duration . ' ' . rcp_filter_duration_unit( $level->duration_unit, $level->duration ); ?>"/>
-								<input type="hidden" id="subscription_expiration_<?php echo $level->id; ?>" value="<?php echo date( 'F j, Y', strtotime( rcp_calc_member_expiration( $level ) ) ); ?>"/>
-							<?php endforeach; ?>
-						</li>
-						<li class="level-price">
-							<span>Amount: </span>
-							<span class="amount level-value">
-								<span>$<?php echo rcp_get_subscription_price( rcp_get_subscription_id( $user_ID ) ); ?> </span>
-								<span>for <?php echo $current_level->duration . ' ' . rcp_filter_duration_unit( $current_level->duration_unit, $current_level->duration ); ?></span>
-							</span>
-						</li>
-						<li class="next-pay-date">
-							<?php if( rcp_is_recurring( $user_ID ) ) : ?>
-							<span>Next payment date: </span>
-							<?php else : ?>
-							<span>Expiration date: </span>
-							<?php endif; ?>
-							<span class="payment-date level-value"><?php echo rcp_get_expiration_date( $user_ID ); ?></span>
-						</li>
+					<div id="sub-update-message" class="info_message" style="display:none;">
+						<!--filled via jQuery-->
+					</div>
+					<div id="submit-wrap" style="display:none">
 
-						<div id="sub-update-message" class="info_message" style="display:none;">
-							<!--filled via jQuery-->
+						<button id="sub-edit-submit">Confirm</button>
+						<button id="cancel-edit-subscription" class="toggle-subscription-edit" style="display:none">Nevermind</button>
+
+						<div id="sub-edit-confirm-modal" class="reveal-modal">
+							<h3>Confirm Subscription Change</h3>
+							<p>Please enter your password to confirm that you wish to change your subscription.</p>
+							<label for="pass">Password:</label>
+							<input type="password" id="pass" name="pass" value=""/>
+							<input type="hidden" name="cus_id" value="<?php echo $stripe_id; ?>"/>
+							<input type="hidden" id="current_sub_id" name="current_sub_id" value="<?php echo rcp_get_subscription_id( $user_ID ); ?>"/>
+							<input type="hidden" id="current_sub_name" name="current_sub_name" value="<?php echo rcp_get_subscription( $user_ID ); ?>"/>
+							<input type="hidden" name="update_subscription" value="1"/>
+							<input id="edit-subscription" type="submit" class="update" name="submit_subscription_edit" value="Update"/>
+							<a href="#" class="close-reveal-modal close"><i class="icon-remove"></i></a>
 						</div>
 
-					</ul>
-				</div>
+						<?php // Now output hidden values ?>
+						<?php foreach( $levels as $level ) : ?>
+							<?php if( $level->price == 0 ) { continue; } ?>
+							<input type="hidden" id="subscription_price_<?php echo $level->id; ?>" value="$<?php echo rcp_get_subscription_price( $level->id ); ?> for <?php echo $level->duration . ' ' . rcp_filter_duration_unit( $level->duration_unit, $level->duration ); ?>"/>
+							<input type="hidden" id="subscription_expiration_<?php echo $level->id; ?>" value="<?php echo date( 'F j, Y', strtotime( rcp_calc_member_expiration( $level ) ) ); ?>"/>
+						<?php endforeach; ?>
 
-				<div id="submit-wrap" style="display:none">
-
-					<button id="sub-edit-submit">Update Your Subscription</button>
-
-					<div id="sub-edit-confirm-modal" class="reveal-modal">
-						<h3>Confirm Subscription Change</h3>
-						<p>Please enter your password to confirm that you wish to change your subscription.</p>
-						<label for="pass">Password:</label>
-						<input type="password" id="pass" name="pass" value=""/>
-						<input type="hidden" name="cus_id" value="<?php echo $stripe_id; ?>"/>
-						<input type="hidden" id="current_sub_id" name="current_sub_id" value="<?php echo rcp_get_subscription_id( $user_ID ); ?>"/>
-						<input type="hidden" id="current_sub_name" name="current_sub_name" value="<?php echo rcp_get_subscription( $user_ID ); ?>"/>
-						<input type="hidden" name="update_subscription" value="1"/>
-						<input id="edit-subscription" type="submit" class="update" name="submit_subscription_edit" value="Update"/>
-						<a href="#" class="close-reveal-modal close"><i class="icon-remove"></i></a>
 					</div>
+
 				</div>
+
 			</form>
 
 			<div class="stored-card-info">
