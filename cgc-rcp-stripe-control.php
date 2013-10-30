@@ -268,7 +268,7 @@ function cgc_rcp_sub_control_shortcode() {
 					var exp     = $('#subscription_expiration_' + sub_id).val();
 					var currrent_exp  = $('#subscription_expiration_' + current_sub_id).val();
 					var current_level = $('#current_sub_name').val();
-					var new_level     = $('#subscription_options_menu input:checked').next().text();
+					var new_level     = $('#subscription_options_menu input:checked').find('.sub_level_name').text();
 
 					if( new_level == 'Lifetime' ) {
 
@@ -379,7 +379,7 @@ function cgc_rcp_sub_control_shortcode() {
 											<?php if( $level->price == 0 || $level->id == $current_level->id ) { continue; } ?>
 											<input type="radio" name="subscription_level" id="sub_level_<?php echo $level->id; ?>" value="<?php echo $level->id; ?>"/>
 											<label for="sub_level_<?php echo $level->id; ?>">
-												<?php echo $level->name; ?>
+												<span class="sub_level_name"><?php echo $level->name; ?></span>
 												<span class="sub_level_description"><?php echo $level->description; ?></span>
 												<span class="sub_level_description">$<?php echo $level->price; ?>/<?php echo $level->duration_unit; ?></span>
 											</label>
