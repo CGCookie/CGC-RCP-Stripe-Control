@@ -283,7 +283,7 @@ function cgc_rcp_sub_control_shortcode() {
 					}
 
 					if( new_level == 'Cancel Citizen Subscription' || new_level == 'Lifetime' ) {
-						$('#cgc_subscription_overview .level-price, #cgc_subscription_overview .next-pay-date').hide();
+						$('#cgc_subscription_overview .level-amount, #cgc_subscription_overview .payment-date').hide();
 					} else {
 
 						$('#cgc_subscription_overview .level-amount').text( price ).addClass('modified');
