@@ -388,7 +388,7 @@ function cgc_rcp_sub_control_shortcode() {
 									</div>
 								</td>
 								<td>
-									<span class="level-amount level-value">$<?php echo $current_level->price; ?>/mo</span>
+									<span class="level-amount level-value">$<?php echo $current_level->price; ?> for <?php echo $current_level->duration . ' ' . rcp_filter_duration_unit( $level->duration_unit, $level->duration );</span>
 								</td>
 								<td>
 									<span class="payment-date level-value"><?php echo rcp_get_expiration_date( $user_ID ); ?></span>
