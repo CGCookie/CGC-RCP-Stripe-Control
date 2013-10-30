@@ -387,7 +387,7 @@ function cgc_rcp_sub_control_shortcode() {
 										<?php endforeach; ?>
 										<?php if( rcp_is_recurring( $user_ID ) ) : ?>
 											<input type="radio" id="sub_level_cancel" name="subscription_level" value="x">
-											<label for="sub_level_cancel">Cancel Citizen Subscription</label>
+											<label for="sub_level_cancel"><span class="sub_level_name">Cancel Citizen Subscription</span></label>
 										<?php endif; ?>
 									</div>
 								</td>
