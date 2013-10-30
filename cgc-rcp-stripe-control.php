@@ -257,7 +257,7 @@ function cgc_rcp_sub_control_shortcode() {
 					$('#cgc_subscription_overview .level-amount').text( price );
 					$('#cgc_subscription_overview .payment-date').text( exp );
 					$('#cgc_subscription_overview li').removeClass('modified');
-					$('#sub-update-message,#subscription_options_menu').hide();
+					$('#sub-update-message,#subscription_options_menu,#cancel-edit-subscription,#sub-edit-submit').hide();
 					$('#edit-subscription').show();
 				})
 
