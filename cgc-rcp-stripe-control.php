@@ -123,6 +123,8 @@ function cgc_rcp_sub_control_shortcode() {
 
 
 	$current_level = rcp_get_subscription_details( rcp_get_subscription_id( $user_ID ) );
+	$levels = rcp_get_subscription_levels( 'active' );
+
 
 	if( isset( $_GET['message'] ) ) : ?>
 	<div id="cgc_subscription_messages">
