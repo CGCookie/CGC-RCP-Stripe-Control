@@ -14,6 +14,12 @@
  *
  */
 
+function cgc_rcp_remove_actions() {
+	remove_action('rcp_before_registration_submit_field', 'rcp_stripe_form_fields');
+}
+add_action( 'init', 'cgc_rcp_remove_actions' );
+
+
 function cgc_rcp_process_free_signup() {
 
 	$user_email = sanitize_text_field( $_POST['rcp_user_email'] );
@@ -91,7 +97,6 @@ function cgc_rcp_process_free_signup() {
 }
 add_action( 'wp_ajax_nopriv_rcp_register_free', 'cgc_rcp_process_free_signup' );
 
-remove_action('rcp_before_registration_submit_field', 'rcp_stripe_form_fields');
 function cgc_rcp_stripe_form_fields() {
 
 	// Custom Stripe payment form
