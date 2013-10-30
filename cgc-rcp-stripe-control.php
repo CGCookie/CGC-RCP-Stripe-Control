@@ -246,7 +246,7 @@ function cgc_rcp_sub_control_shortcode() {
 				// Toggle subscription edit
 				$('.toggle-subscription-edit').click(function(e) {
 					e.preventDefault();
-					$('#sub-edit-submit,#cancel-edit-subscription').toggle();
+					$('#sub-edit-submit,#cancel-edit-subscription,#edit-subscription').toggle();
 					$('#cgc_subscription_overview .level-name, #subscription_options_menu').toggle();
 				});
 
@@ -258,6 +258,7 @@ function cgc_rcp_sub_control_shortcode() {
 					$('#cgc_subscription_overview .payment-date').text( exp );
 					$('#cgc_subscription_overview li').removeClass('modified');
 					$('#sub-update-message').hide();
+					$('#edit-subscription').show();
 				})
 
 				// Update price and payment due date when changing subscriptions
