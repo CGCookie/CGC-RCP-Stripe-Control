@@ -91,6 +91,137 @@ function cgc_rcp_process_free_signup() {
 }
 add_action( 'wp_ajax_nopriv_rcp_register_free', 'cgc_rcp_process_free_signup' );
 
+remove_action('rcp_before_registration_submit_field', 'rcp_stripe_form_fields');
+function cgc_rcp_stripe_form_fields() {
+
+	// Custom Stripe payment form
+
+	global $rcp_options;
+
+	if(isset($rcp_options['gateways']['stripe'])) {
+
+		$publishable_key = NULL;
+
+		if(isset($rcp_options['stripe_test_mode'])) {
+			$publishable_key = trim( $rcp_options['stripe_test_publishable'] );
+		} else {
+			$publishable_key = trim( $rcp_options['stripe_live_publishable'] );
+		}
+
+		ob_start(); ?>
+		<script type="text/javascript">
+			// this identifies your website in the createToken call below
+			Stripe.setPublishableKey('<?php echo $publishable_key; ?>');
+
+			function stripeResponseHandler(status, response) {
+				if (response.error) {
+					// re-enable the submit button
+					jQuery('#rcp_registration_form #rcp_submit').attr("disabled", false);
+
+					jQuery('#rcp_ajax_loading').hide();
+
+					// show the errors on the form
+					jQuery(".payment-errors").html(response.error.message);
+
+				} else {
+					var form$ = jQuery("#rcp_registration_form");
+					// token contains id, last4, and card type
+					var token = response['id'];
+					// insert the token into the form so it gets submitted to the server
+					form$.append("<input type='hidden' name='stripeToken' value='" + token + "' />");
+
+					// and submit
+					form$.get(0).submit();
+
+				}
+			}
+
+			jQuery(document).ready(function($) {
+
+				// show the credit card fields
+				$('select#rcp_gateway').change(function() {
+					var $this = $(this);
+					if($('option:selected', $this).val() == 'stripe') {
+						$('#rcp-stripe-fields').slideDown();
+					} else {
+						$('#rcp-stripe-fields').slideUp();
+					}
+				});
+
+				if( $('.rcp_level:checked').attr('rel') == 0 ) {
+					$('#rcp-stripe-fields').hide();
+				}
+				$('.rcp_level').change(function() {
+					if( $(this).attr('rel') == 0 ) {
+						$('#rcp-stripe-fields').slideUp();
+					} else if( $('select#rcp_gateway option:selected').val() == 'stripe' || $('input[name=rcp_gateway]').val() == 'stripe' ) {
+						$('#rcp-stripe-fields').slideDown();
+					}
+				});
+				$("#rcp_submit").on('click', function(event) {
+					// get the subscription price
+
+					if( $('.rcp_level:checked').length )
+						var price = $('.rcp_level:checked').attr('rel') * 100;
+					else
+						var price = $('.rcp_level').attr('rel') * 100;
+
+					if( ( $('select#rcp_gateway option:selected').val() == 'stripe' || $('input[name=rcp_gateway]').val() == 'stripe') && price > 0) {
+
+						event.preventDefault();
+
+						// disable the submit button to prevent repeated clicks
+						$('#rcp_registration_form #rcp_submit').attr("disabled", "disabled");
+						$('#rcp_ajax_loading').show();
+
+						// createToken returns immediately - the supplied callback submits the form if there are no errors
+						Stripe.createToken({
+							number: $('.card-number').val(),
+							cvc: $('.card-cvc').val(),
+							exp_month: $('.card-expiry-month').val(),
+							exp_year: $('.card-expiry-year').val()
+						}, stripeResponseHandler);
+
+						return false;
+					}
+				});
+			});
+		</script>
+		<fieldset id="rcp-stripe-fields" <?php if(count(rcp_get_enabled_payment_gateways()) > 1) { ?>style="display:none;"<?php } ?>>
+			<h3 class="fieldset-title">Payment Information</h3>
+			<div class="payment-errors"></div>
+			<p>
+		        <label><?php _e('Card Number', 'rcp_stripe'); ?></label>
+		        <input type="text" size="20" autocomplete="off" class="card-number" />
+		    </p>
+		    <p>
+		        <label><?php _e('CVC', 'rcp_stripe'); ?></label>
+		        <input type="text" size="4" autocomplete="off" class="card-cvc" />
+		    </p>
+		    <p class="cc-expiration">
+		        <label><?php _e('Expiration (MM/YYYY)', 'rcp_stripe'); ?></label>
+		        <select class="card-expiry-month">
+					<?php for( $i = 1; $i <= 12; $i++ ) : ?>
+						<option value="<?php echo $i; ?>"><?php echo $i . ' - ' . rcp_get_month_name( $i ); ?></option>
+					<?php endfor; ?>
+				</select>
+				<span> / </span>
+				<select class="card-expiry-year">
+					<?php
+					$year = date( 'Y' );
+					for( $i = $year; $i <= $year + 10; $i++ ) : ?>
+						<option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+					<?php endfor; ?>
+				</select>
+		    </p>
+		</fieldset>
+
+		<?php
+		echo ob_get_clean();
+	}
+}
+add_action('rcp_after_register_form_fields', 'cgc_rcp_stripe_form_fields', 100);
+
 function cgc_rcp_force_auto_renew( $data ) {
 	$data['auto_renew'] = 1;
 	return $data;
