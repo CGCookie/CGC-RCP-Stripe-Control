@@ -795,3 +795,29 @@ function cgc_rcp_check_password() {
 	die( '0' );
 }
 add_action( 'wp_ajax_validate_subscription_password', 'cgc_rcp_check_password' );
+
+
+function cgc_rcp_member_row_class( $member ) {
+	if( ! function_exists( 'rcp_stripe_is_customer' ) )
+		return;
+
+	if( rcp_stripe_is_customer( $member->ID ) ) {
+		echo 'stripe';
+	} else {
+		echo 'paypal';
+	}
+}
+add_action( 'rcp_member_row_class', 'cgc_rcp_member_row_class' );
+
+function cgc_rcp_member_merchant_css() {
+	if( isset( $_GET['page'] ) && 'rcp-members' == $_GET['page'] ) {
+		echo '<style>.merchant-legend { display: inline-block; height: 10px; width: 10px; }.rcp_row.paypal td, .merchant-legend.paypal { background: #c3cbe8; }.rcp_row.stripe td, .merchant-legend.stripe { background: #e8d5c3; }</style>';
+	}
+}
+add_action( 'admin_head', 'cgc_rcp_member_merchant_css' );
+
+function cgc_rcp_member_merchat_legend() {
+	echo '<span class="merchant-legend stripe"></span>Stripe&nbsp;';
+	echo '<span class="merchant-legend paypal"></span>PayPal';
+}
+add_action( 'rcp_members_above_table', 'cgc_rcp_member_merchat_legend' );
