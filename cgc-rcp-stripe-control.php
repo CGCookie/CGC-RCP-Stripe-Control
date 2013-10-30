@@ -246,7 +246,7 @@ function cgc_rcp_sub_control_shortcode() {
 				// Toggle subscription edit
 				$('.toggle-subscription-edit').click(function(e) {
 					e.preventDefault();
-					$('button.toggle-subscription-edit').toggle();
+					$('#sub-edit-submit,#cancel-edit-subscription').toggle();
 					$('#cgc_subscription_overview .level-name, #subscription_options_menu').toggle();
 				});
 
@@ -285,9 +285,9 @@ function cgc_rcp_sub_control_shortcode() {
 						$('#cgc_subscription_overview .level-price, #cgc_subscription_overview .next-pay-date').hide();
 					} else {
 
-						$('#cgc_subscription_overview .level-price .amount').text( price ).addClass('modified');
+						$('#cgc_subscription_overview .level-amount').text( price ).addClass('modified');
 						$('#cgc_subscription_overview .payment-date').text( exp ).addClass('modified');
-						$('#cgc_subscription_overview .level-price, #cgc_subscription_overview .next-pay-date').show().addClass('modified');
+						$('#cgc_subscription_overview .level-amount, #cgc_subscription_overview .next-pay-date').show().addClass('modified');
 					}
 					if ( new_level != current_level){
 						$('#submit-wrap').show();
@@ -387,7 +387,7 @@ function cgc_rcp_sub_control_shortcode() {
 									</div>
 								</td>
 								<td>
-									<span class="amount level-value">$<?php echo $current_level->price; ?>/mo</span>
+									<span class="level-amount level-value">$<?php echo $current_level->price; ?>/mo</span>
 								</td>
 								<td>
 									<span class="payment-date level-value"><?php echo rcp_get_expiration_date( $user_ID ); ?></span>
@@ -404,9 +404,9 @@ function cgc_rcp_sub_control_shortcode() {
 					<div id="sub-update-message" class="info_message" style="display:none;">
 						<!--filled via jQuery-->
 					</div>
-					<div id="submit-wrap" style="display:none">
+					<div id="submit-wrap">
 
-						<button id="sub-edit-submit">Confirm</button>
+						<button id="sub-edit-submit" style="display:none">Confirm</button>
 						<button id="cancel-edit-subscription" class="toggle-subscription-edit" style="display:none">Nevermind</button>
 
 						<div id="sub-edit-confirm-modal" class="reveal-modal">
