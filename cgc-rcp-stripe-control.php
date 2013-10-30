@@ -300,6 +300,9 @@ function cgc_rcp_sub_control_shortcode() {
 						$('#cgc_subscription_overview li').removeClass('modified');
 					}
 
+					$('#subscription_options_menu').hide();
+					$('#cgc_subscription_overview .level-name').text( new_level );
+
 				});
 
 				$('#sub-edit-submit').click(function(e) {
