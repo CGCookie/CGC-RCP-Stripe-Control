@@ -14,6 +14,21 @@
  *
  */
 
+function cgc_rcp_force_auto_renew( $data ) {
+	$data['auto_renew'] = 1;
+	return $data;
+}
+add_filter( 'rcp_subscription_data', 'cgc_rcp_force_auto_renew' );
+
+function cgc_rcp_filter_username_length( $user ) {
+	if( strlen( $user['login'] ) < 4 && ! empty( $user['need_new'] ) ) {
+		rcp_errors()->add( 'short_username', 'Username is too short. It must be at least 4 characters.', 'register' );
+	}
+
+	return $user;
+}
+add_filter( 'rcp_user_registration_data', 'cgc_rcp_filter_username_length' );
+
 
 function cgc_rcp_sub_control_shortcode() {
 
