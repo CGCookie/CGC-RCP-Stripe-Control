@@ -288,7 +288,7 @@ function cgc_rcp_sub_control_shortcode() {
 
 						$('#cgc_subscription_overview .level-amount').text( price ).addClass('modified');
 						$('#cgc_subscription_overview .payment-date').text( exp ).addClass('modified');
-						$('#cgc_subscription_overview .level-amount, #cgc_subscription_overview .next-pay-date').show().addClass('modified');
+						$('#cgc_subscription_overview .level-amount, #cgc_subscription_overview .payment-date').show().addClass('modified');
 					}
 					if ( new_level != current_level){
 						$('#submit-wrap').show();
