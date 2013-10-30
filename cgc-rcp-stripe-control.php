@@ -244,7 +244,7 @@ function cgc_rcp_sub_control_shortcode() {
 				var current_sub_id = $('#current_sub_id').val();
 
 				// Toggle subscription edit
-				$('.toggle-subscription-edit').click(function(e) {
+				$('#edit-subscription').click(function(e) {
 					e.preventDefault();
 					$('#sub-edit-submit,#cancel-edit-subscription,#edit-subscription').toggle();
 					$('#cgc_subscription_overview .level-name, #subscription_options_menu').toggle();
