@@ -189,7 +189,7 @@ function cgc_rcp_sub_control_shortcode() {
 				</ul>
 				<p>If you wish to cancel your PayPal subscription, click the link below, log into your PayPal account, navigate to Profile > My Money > My Preapproved Payments and locate the subscription for CG Cookie.</p>
 				<p class="paypal-cancel">
-					<a href="https://www.paypal.com/cgi-bin/customerprofileweb?cmd=_manage-paylist" target="_blank">Cancel Subscription</a>
+					<a href="https://www.paypal.com/cgi-bin/customerprofileweb?cmd=_manage-paylist" target="_blank">Cancel Citizen Subscription</a>
 				</p>
 			<?php endif; ?>
 		</div>
@@ -274,7 +274,7 @@ function cgc_rcp_sub_control_shortcode() {
 
 						var message = 'Your subscription will be changed from ' + current_level + ' to ' + new_level + '. You will be billed $630 immediately but will never be billed again. Note, your current subscription will be cancelled and you will receive an email alerting you of the cancellation, then you will receive a second email alerting you of the Lifetime activation. Click Update below to confirm the change to your subscription.';
 
-					} else if ( new_level == 'Cancel Subscription' ) {
+					} else if ( new_level == 'Cancel Citizen Subscription' ) {
 
 						var message = 'Your subscription payments will be cancelled immediately but you will retain access to all Citizen content until the end of term, ' + currrent_exp;
 
@@ -282,7 +282,7 @@ function cgc_rcp_sub_control_shortcode() {
 						var message = 'Your subscription will be changed from ' + current_level + ' to ' + new_level + '. You will now be billed ' + price + '. Click Update below to confirm the change to your subscription.';
 					}
 
-					if( new_level == 'Cancel Subscription' || new_level == 'Lifetime' ) {
+					if( new_level == 'Cancel Citizen Subscription' || new_level == 'Lifetime' ) {
 						$('#cgc_subscription_overview .level-price, #cgc_subscription_overview .next-pay-date').hide();
 					} else {
 
