@@ -247,27 +247,27 @@ function cgc_rcp_sub_control_shortcode() {
 				$('.toggle-subscription-edit').click(function(e) {
 					e.preventDefault();
 					$('button.toggle-subscription-edit').toggle();
-					$('#subscription_details .level-name, #subscription_options_menu').toggle();
+					$('#cgc_subscription_overview .level-name, #subscription_options_menu').toggle();
 				});
 
 				$('#cancel-edit-subscription').click(function(e) {
 					e.preventDefault();
 					var price = $('#subscription_price_' + current_sub_id).val();
 					var exp   = $('#subscription_expiration_' + current_sub_id).val();
-					$('#subscription_details .level-price .amount').text( price );
-					$('#subscription_details .payment-date').text( exp );
-					$('#subscription_details li').removeClass('modified');
+					$('#cgc_subscription_overview .level-price .amount').text( price );
+					$('#cgc_subscription_overview .payment-date').text( exp );
+					$('#cgc_subscription_overview li').removeClass('modified');
 					$('#sub-update-message').hide();
 				})
 
 				// Update price and payment due date when changing subscriptions
-				$('#subscription_options').change(function() {
+				$('#subscription_options_menu input').click(function() {
 					var sub_id  = $(this).val();
 					var price   = $('#subscription_price_' + sub_id).val();
 					var exp     = $('#subscription_expiration_' + sub_id).val();
 					var currrent_exp  = $('#subscription_expiration_' + current_sub_id).val();
 					var current_level = $('#current_sub_name').val();
-					var new_level     = $('#subscription_options_menu select option:selected').text();
+					var new_level     = $('#subscription_options_menu input:checked').val();
 
 					if( new_level == 'Lifetime' ) {
 
@@ -282,12 +282,12 @@ function cgc_rcp_sub_control_shortcode() {
 					}
 
 					if( new_level == 'Cancel Subscription' || new_level == 'Lifetime' ) {
-						$('#subscription_details .level-price, #subscription_details .next-pay-date').hide();
+						$('#cgc_subscription_overview .level-price, #cgc_subscription_overview .next-pay-date').hide();
 					} else {
 
-						$('#subscription_details .level-price .amount').text( price ).addClass('modified');
-						$('#subscription_details .payment-date').text( exp ).addClass('modified');
-						$('#subscription_details .level-price, #subscription_details .next-pay-date').show().addClass('modified');
+						$('#cgc_subscription_overview .level-price .amount').text( price ).addClass('modified');
+						$('#cgc_subscription_overview .payment-date').text( exp ).addClass('modified');
+						$('#cgc_subscription_overview .level-price, #cgc_subscription_overview .next-pay-date').show().addClass('modified');
 					}
 					if ( new_level != current_level){
 						$('#submit-wrap').show();
@@ -296,7 +296,7 @@ function cgc_rcp_sub_control_shortcode() {
 					if ( new_level == current_level ) {
 						$('#sub-update-message').hide();
 						$('#submit-wrap').hide();
-						$('#subscription_details li').removeClass('modified');
+						$('#cgc_subscription_overview li').removeClass('modified');
 					}
 
 				});
@@ -366,7 +366,7 @@ function cgc_rcp_sub_control_shortcode() {
 							<tr>
 								<td>
 									<span class="level-name level-value"><?php echo rcp_get_subscription( $user_ID ); ?></span>
-									<div id="subscription_options">
+									<div id="subscription_options_menu" style="display:none;">
 										<span class="sub_level_current">
 											<span class="sub_level_current_name"><?php echo $current_level->name; ?></span>
 											<span class="sub_level_current_label">Current Plan</span>
