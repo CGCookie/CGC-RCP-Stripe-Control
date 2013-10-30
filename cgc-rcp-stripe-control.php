@@ -301,6 +301,7 @@ function cgc_rcp_sub_control_shortcode() {
 					}
 
 					$('#subscription_options_menu').hide();
+					$('#edit-subscription').show();
 					$('#cgc_subscription_overview .level-name').text( new_level ).show();
 
 				});
