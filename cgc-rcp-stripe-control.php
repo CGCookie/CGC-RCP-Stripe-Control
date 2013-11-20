@@ -14,6 +14,104 @@
  *
  */
 
+function cgc_rcp_remove_actions() {
+	remove_action('rcp_before_registration_submit_field', 'rcp_stripe_form_fields');
+}
+add_action( 'init', 'cgc_rcp_remove_actions' );
+
+
+function cgc_rcp_process_free_signup() {
+
+	$user_email = sanitize_text_field( $_POST['rcp_user_email'] );
+	$user_login = sanitize_text_field( $_POST['rcp_user_login'] );
+	$user_pass  = sanitize_text_field( $_POST['rcp_user_pass'] );
+	$user_pass2 = sanitize_text_field( $_POST['rcp_user_pass_confirm'] );
+
+	if( ! empty( $_POST['cookie_jar'] ) ) {
+		rcp_errors()->add( 'bot', __( 'Nice try Mr. Robot', 'rcp' ), 'free_register' );
+	}
+
+	if( username_exists( $user_login ) ) {
+		// Username already registered
+		rcp_errors()->add( 'username_unavailable', __( 'Username already taken', 'rcp' ), 'free_register' );
+	}
+	if( ! validate_username( $user_login ) ) {
+		// invalid username
+		rcp_errors()->add( 'username_invalid', __( 'Invalid username', 'rcp' ), 'free_register' );
+	}
+	if( empty( $user_login ) ) {
+		// empty username
+		rcp_errors()->add( 'username_empty', __( 'Please enter a username', 'rcp' ), 'free_register' );
+	}
+	if( ! is_email( $user_email ) ) {
+		//invalid email
+		rcp_errors()->add( 'email_invalid', __( 'Invalid email', 'rcp' ), 'free_register' );
+	}
+	if( email_exists( $user_email ) ) {
+		//Email address already registered
+		rcp_errors()->add( 'email_used', __( 'Email already registered', 'rcp' ), 'free_register' );
+	}
+	if( empty( $user_pass ) ) {
+		// passwords is empty
+		rcp_errors()->add( 'password_empty', __( 'Please enter a password', 'rcp' ), 'free_register' );
+	}
+	if( empty( $user_pass2 ) ) {
+		// passwords is empty
+		rcp_errors()->add( 'password_confirm_empty', __( 'Please confirm your password', 'rcp' ), 'free_register' );
+	}
+
+	if( $user_pass2 !== $user_pass ) {
+		// passwords is empty
+		rcp_errors()->add( 'password_mismatch', __( 'Your passwords do not match', 'rcp' ), 'free_register' );
+	}
+
+	// retrieve all error messages, if any
+	$errors = rcp_errors()->get_error_messages();
+
+	// only create the user if there are no errors
+	if( empty( $errors ) ) {
+		$user_id = wp_insert_user( array(
+				'user_login'		=> $user_login,
+				'user_pass'	 		=> $user_pass,
+				'user_email'		=> $user_email,
+				'user_registered'	=> date( 'Y-m-d H:i:s' ),
+				'role'				=> 'subscriber'
+			)
+		);
+
+		$subscription_key = rcp_generate_subscription_key();
+		update_user_meta( $user_id, 'rcp_subscription_key', $subscription_key );
+		update_user_meta( $user_id, 'rcp_subscription_level', 1 );
+		rcp_set_status( $user_id, 'free' );
+
+		$creds = array();
+		$creds['user_login'] = $user_login;
+		$creds['user_password'] = $user_pass;
+		$creds['remember'] = false;
+		$user = wp_signon( $creds, false );
+		die('1');
+	} else {
+		echo rcp_show_error_messages( 'free_register' ); exit;
+	}
+	die('-1');
+}
+add_action( 'wp_ajax_nopriv_rcp_register_free', 'cgc_rcp_process_free_signup' );
+
+function cgc_rcp_force_auto_renew( $data ) {
+	$data['auto_renew'] = 1;
+	return $data;
+}
+add_filter( 'rcp_subscription_data', 'cgc_rcp_force_auto_renew' );
+
+function cgc_rcp_filter_username_length( $user ) {
+	if( strlen( $user['login'] ) < 4 && ! empty( $user['need_new'] ) ) {
+		rcp_errors()->add( 'short_username', 'Username is too short. It must be at least 4 characters.', 'register' );
+	}
+
+	return $user;
+}
+add_filter( 'rcp_user_registration_data', 'cgc_rcp_filter_username_length' );
+
 
 function cgc_rcp_sub_control_shortcode() {
 
@@ -402,7 +500,7 @@ function cgc_rcp_sub_control_shortcode() {
 
 		?>
 	<?php endif; ?>
-	<p>Billing trouble? <a href="#">Contact support</a>.</p>
+	<p>Billing trouble? <a href="#" onClick="script: Zenbox.show(); return false;">Contact support</a>.</p>
 <?php
 }
 
@@ -567,3 +665,29 @@ function cgc_rcp_check_password() {
 	die( '0' );
 }
 add_action( 'wp_ajax_validate_subscription_password', 'cgc_rcp_check_password' );
+
+
+function cgc_rcp_member_row_class( $member ) {
+	if( ! function_exists( 'rcp_stripe_is_customer' ) )
+		return;
+
+	if( rcp_stripe_is_customer( $member->ID ) ) {
+		echo 'stripe';
+	} else {
+		echo 'paypal';
+	}
+}
+add_action( 'rcp_member_row_class', 'cgc_rcp_member_row_class' );
+
+function cgc_rcp_member_merchant_css() {
+	if( isset( $_GET['page'] ) && 'rcp-members' == $_GET['page'] ) {
+		echo '<style>.merchant-legend { display: inline-block; height: 10px; width: 10px; }.rcp_row.paypal td, .merchant-legend.paypal { background: #c3cbe8; }.rcp_row.stripe td, .merchant-legend.stripe { background: #e8d5c3; }</style>';
+	}
+}
+add_action( 'admin_head', 'cgc_rcp_member_merchant_css' );
+
+function cgc_rcp_member_merchat_legend() {
+	echo '<span class="merchant-legend stripe"></span>Stripe&nbsp;';
+	echo '<span class="merchant-legend paypal"></span>PayPal';
+}
+add_action( 'rcp_members_above_table', 'cgc_rcp_member_merchat_legend' );
