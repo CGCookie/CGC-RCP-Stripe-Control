@@ -19,7 +19,6 @@ function cgc_rcp_remove_actions() {
 }
 add_action( 'init', 'cgc_rcp_remove_actions' );
 
-
 function cgc_rcp_process_free_signup() {
 
 	$user_email = sanitize_text_field( $_POST['rcp_user_email'] );
