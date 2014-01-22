@@ -97,7 +97,11 @@ function cgc_rcp_process_free_signup() {
 add_action( 'wp_ajax_nopriv_rcp_register_free', 'cgc_rcp_process_free_signup' );
 
 function cgc_rcp_force_auto_renew( $data ) {
-	$data['auto_renew'] = 1;
+	if( ! empty( $data['length'] ) ) {
+		$data['auto_renew'] = 1;
+	} else {
+		$data['auto_renew'] = false;
+	}
 	return $data;
 }
 add_filter( 'rcp_subscription_data', 'cgc_rcp_force_auto_renew' );
