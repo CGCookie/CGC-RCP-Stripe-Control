@@ -69,6 +69,7 @@ function cgc_rcp_process_free_signup() {
 
 	// only create the user if there are no errors
 	if( empty( $errors ) ) {
+		
 		$user_id = wp_insert_user( array(
 				'user_login'		=> $user_login,
 				'user_pass'	 		=> $user_pass,
@@ -91,9 +92,8 @@ function cgc_rcp_process_free_signup() {
 
 		// Process newsletter signups
 		if( ! empty( $_POST['newsletters'] ) ) {
-
-			foreach( $_POST['newsletters'] as $newsletter ) {
-
+			
+			foreach( $_POST['newsletters'] as $newsletter => $checked ) {
 				// Set the list ID based on the newsletter being subscribed
 				switch( $newsletter ) {
 
@@ -124,7 +124,7 @@ function cgc_rcp_process_free_signup() {
 					case 'sculpt' :
 
 						$list_id = '300fcc9cf3';
-
+						
 						break;
 
 					case 'unity' :
@@ -134,9 +134,8 @@ function cgc_rcp_process_free_signup() {
 						break;
 
 				}
-
 				if( ! empty( $list_id ) ) {
-
+					
 					// Subscribe the user to the list
 
 					$options = get_option( 'cgc_theme_settings' );
