@@ -143,9 +143,10 @@ function cgc_rcp_process_free_signup() {
 						require_once( EDD_MAILCHIMP_PATH . '/includes/MailChimp.class.php' );
 					}
 
-					$api    = new EDD_MailChimp_API( '72ac78438329f7925d6d32eaf29b2d9c-us1' );
+					$options = get_option( 'cgc_theme_settings' );
+					$api     = new EDD_MailChimp_API( trim( $options['mailchimp_api'] ) );
 
-					$result = $api->call('lists/subscribe', array(
+					$result  = $api->call('lists/subscribe', array(
 						'id'                => $list_id,
 						'email'             => array( 'email' => $user_email ),
 						'double_optin'      => false,
