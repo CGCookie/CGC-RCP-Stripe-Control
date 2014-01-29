@@ -94,6 +94,7 @@ function cgc_rcp_process_free_signup() {
 
 			foreach( $_POST['newsletters'] as $newsletter ) {
 
+				// Set the list ID based on the newsletter being subscribed
 				switch( $newsletter ) {
 
 					case 'blender' :
@@ -147,7 +148,7 @@ function cgc_rcp_process_free_signup() {
 					$result = $api->call('lists/subscribe', array(
 						'id'                => $list_id,
 						'email'             => array( 'email' => $user_email ),
-						'double_optin'      => true,
+						'double_optin'      => false,
 						'update_existing'   => true,
 						'replace_interests' => false,
 						'send_welcome'      => false,
