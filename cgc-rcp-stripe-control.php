@@ -88,6 +88,77 @@ function cgc_rcp_process_free_signup() {
 		$creds['user_password'] = $user_pass;
 		$creds['remember'] = false;
 		$user = wp_signon( $creds, false );
+
+		// Process newsletter signups
+		if( ! empty( $_POST['newsletters'] ) ) {
+
+			foreach( $_POST['newsletters'] as $newsletter ) {
+
+				switch( $newsletter ) {
+
+					case 'blender' :
+
+						$list_id = '';
+
+						break;
+
+					case 'max' :
+
+						$list_id = '';
+
+						break;
+
+					case 'modo' :
+
+						$list_id = '';
+
+						break;
+
+					case 'concept' :
+
+						$list_id = '';
+
+						break;
+
+					case 'sculpt' :
+
+						$list_id = '1165885';
+
+						break;
+
+					case 'unity' :
+
+						$list_id = '';
+
+						break;
+
+				}
+
+				if( ! empty( $list_id ) ) {
+
+					// Subscribe the user to the list
+
+					if( ! class_exists( 'EDD_MailChimp_API' ) ) {
+						require_once( EDD_MAILCHIMP_PATH . '/includes/MailChimp.class.php' );
+					}
+
+					$api    = new EDD_MailChimp_API( '72ac78438329f7925d6d32eaf29b2d9c-us1' );
+
+					$result = $api->call('lists/subscribe', array(
+						'id'                => $list_id,
+						'email'             => array( 'email' => $user_email ),
+						'double_optin'      => true,
+						'update_existing'   => true,
+						'replace_interests' => false,
+						'send_welcome'      => false,
+					) );
+
+				}
+
+			}
+		}
+
+
 		die('1');
 	} else {
 		echo rcp_show_error_messages( 'free_register' ); exit;
