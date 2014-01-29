@@ -123,7 +123,7 @@ function cgc_rcp_process_free_signup() {
 
 					case 'sculpt' :
 
-						$list_id = '1165885';
+						$list_id = '300fcc9cf3';
 
 						break;
 
