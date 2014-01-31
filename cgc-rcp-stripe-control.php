@@ -99,25 +99,25 @@ function cgc_rcp_process_free_signup() {
 
 					case 'blender' :
 
-						$list_id = '';
+						$list_id = '3048459663';
 
 						break;
 
 					case 'max' :
 
-						$list_id = '';
+						$list_id = 'ea7e380a74';
 
 						break;
 
 					case 'modo' :
 
-						$list_id = '';
+						$list_id = '6bee7fb29f';
 
 						break;
 
 					case 'concept' :
 
-						$list_id = '';
+						$list_id = '2f6d7dedcf';
 
 						break;
 
@@ -129,7 +129,7 @@ function cgc_rcp_process_free_signup() {
 
 					case 'unity' :
 
-						$list_id = '';
+						$list_id = '67b3e96192';
 
 						break;
 
