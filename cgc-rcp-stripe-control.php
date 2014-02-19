@@ -90,6 +90,8 @@ function cgc_rcp_process_free_signup() {
 		$creds['remember'] = false;
 		$user = wp_signon( $creds, false );
 
+		do_action( 'cgc_rcp_account_created', $user_id );
+
 		// Process newsletter signups
 		if( ! empty( $_POST['newsletters'] ) ) {
 			
