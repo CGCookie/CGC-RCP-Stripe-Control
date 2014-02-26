@@ -213,6 +213,7 @@ function cgc_rcp_process_gift_redemption() {
 
 		// all good
 		$discounts->increase_uses( $discount->id );
+		$discounts->add_to_user( get_current_user_id(), $code )
 
 		// Find the subscription level this discount gives access to
 		$subscription = $discount->subscription_id;
