@@ -88,41 +88,51 @@ function cgc_rcp_process_free_signup() {
 		if( ! empty( $_POST['newsletters'] ) ) {
 			
 			foreach( $_POST['newsletters'] as $newsletter => $checked ) {
+				
+
+				$newsletters = array();
+
 				// Set the list ID based on the newsletter being subscribed
 				switch( $newsletter ) {
 
 					case 'blender' :
 
+						$newsletters[] = 'blender';
 						$list_id = '3048459663';
 
 						break;
 
 					case 'max' :
 
+						$newsletters[] = 'max';
 						$list_id = 'ea7e380a74';
 
 						break;
 
 					case 'modo' :
 
+						$newsletters[] = 'modo';
 						$list_id = '6bee7fb29f';
 
 						break;
 
 					case 'concept' :
 
+						$newsletters[] = 'concept';
 						$list_id = '2f6d7dedcf';
 
 						break;
 
 					case 'sculpt' :
 
+						$newsletters[] = 'sculpt';
 						$list_id = '300fcc9cf3';
 						
 						break;
 
 					case 'unity' :
 
+						$newsletters[] = 'unity';
 						$list_id = '67b3e96192';
 
 						break;
@@ -149,7 +159,7 @@ function cgc_rcp_process_free_signup() {
 			}
 		}
 
-		do_action( 'cgc_rcp_account_created', $user_id, $_POST['newsletters'] );
+		do_action( 'cgc_rcp_account_created', $user_id, $newsletters );
 		
 		$creds = array();
 		$creds['user_login'] = $user_login;
