@@ -84,15 +84,6 @@ function cgc_rcp_process_free_signup() {
 		update_user_meta( $user_id, 'rcp_subscription_level', 1 );
 		rcp_set_status( $user_id, 'free' );
 
-		do_action( 'cgc_rcp_account_created', $user_id );
-		
-		$creds = array();
-		$creds['user_login'] = $user_login;
-		$creds['user_password'] = $user_pass;
-		$creds['remember'] = false;
-		$user = wp_signon( $creds, false );
-
-
 		// Process newsletter signups
 		if( ! empty( $_POST['newsletters'] ) ) {
 			
@@ -158,6 +149,13 @@ function cgc_rcp_process_free_signup() {
 			}
 		}
 
+		do_action( 'cgc_rcp_account_created', $user_id, $_POST['newsletters'] );
+		
+		$creds = array();
+		$creds['user_login'] = $user_login;
+		$creds['user_password'] = $user_pass;
+		$creds['remember'] = false;
+		$user = wp_signon( $creds, false );
 
 		die('1');
 	} else {
