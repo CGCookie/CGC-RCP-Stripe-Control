@@ -84,13 +84,12 @@ function cgc_rcp_process_free_signup() {
 		update_user_meta( $user_id, 'rcp_subscription_level', 1 );
 		rcp_set_status( $user_id, 'free' );
 
+		$newsletters = array();
+		
 		// Process newsletter signups
 		if( ! empty( $_POST['newsletters'] ) ) {
 			
 			foreach( $_POST['newsletters'] as $newsletter => $checked ) {
-				
-
-				$newsletters = array();
 
 				// Set the list ID based on the newsletter being subscribed
 				switch( $newsletter ) {
