@@ -38,6 +38,10 @@ function cgc_rcp_process_free_signup() {
 		// invalid username
 		rcp_errors()->add( 'username_invalid', __( 'Invalid username', 'rcp' ), 'free_register' );
 	}
+	if( preg_match( '![^a-z0-9]!i', $user_login ) ) {
+		// invalid username
+		rcp_errors()->add( 'username_invalid', __( 'Special characters are not permitted in usernames', 'rcp' ), 'free_register' );
+	}
 	if( empty( $user_login ) ) {
 		// empty username
 		rcp_errors()->add( 'username_empty', __( 'Please enter a username', 'rcp' ), 'free_register' );
