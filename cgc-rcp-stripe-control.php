@@ -64,6 +64,10 @@ function cgc_rcp_process_free_signup() {
 		rcp_errors()->add( 'password_mismatch', __( 'Your passwords do not match', 'rcp' ), 'free_register' );
 	}
 
+	if( strlen( $user_login ) < 4 ) {
+		rcp_errors()->add( 'short_username', 'Username is too short. It must be at least 4 characters.', 'free_register' );
+	}
+
 	// retrieve all error messages, if any
 	$errors = rcp_errors()->get_error_messages();
 
