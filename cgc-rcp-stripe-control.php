@@ -155,7 +155,7 @@ function cgc_rcp_process_free_signup() {
 					$result  = $api->call('lists/subscribe', array(
 						'id'                => $list_id,
 						'email'             => array( 'email' => $user_email ),
-						'double_optin'      => false,
+						'double_optin'      => true,
 						'update_existing'   => true,
 						'replace_interests' => false,
 						'send_welcome'      => false,
