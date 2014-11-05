@@ -179,7 +179,10 @@ function cgc_rcp_process_free_signup() {
 add_action( 'wp_ajax_nopriv_rcp_register_free', 'cgc_rcp_process_free_signup' );
 
 function cgc_rcp_force_auto_renew( $data ) {
-	if( ! empty( $data['length'] ) ) {
+
+	$gateway = isset( $_POST['rcp_gateway'] ) ? $_POST['rcp_gateway'] : 'stripe';
+
+	if( ! empty( $data['length'] ) && 'paypal' !== $gateway ) {
 		$data['auto_renew'] = 1;
 	} else {
 		$data['auto_renew'] = false;
