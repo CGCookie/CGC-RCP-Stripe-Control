@@ -38,6 +38,10 @@ function cgc_rcp_process_free_signup() {
 		// invalid username
 		rcp_errors()->add( 'username_invalid', __( 'Invalid username', 'rcp' ), 'free_register' );
 	}
+	if( preg_match( '![^a-z0-9]!i', $user_login ) ) {
+		// invalid username
+		rcp_errors()->add( 'username_invalid', __( 'Special characters are not permitted in usernames', 'rcp' ), 'free_register' );
+	}
 	if( empty( $user_login ) ) {
 		// empty username
 		rcp_errors()->add( 'username_empty', __( 'Please enter a username', 'rcp' ), 'free_register' );
@@ -151,7 +155,7 @@ function cgc_rcp_process_free_signup() {
 					$result  = $api->call('lists/subscribe', array(
 						'id'                => $list_id,
 						'email'             => array( 'email' => $user_email ),
-						'double_optin'      => false,
+						'double_optin'      => true,
 						'update_existing'   => true,
 						'replace_interests' => false,
 						'send_welcome'      => false,
@@ -179,7 +183,10 @@ function cgc_rcp_process_free_signup() {
 add_action( 'wp_ajax_nopriv_rcp_register_free', 'cgc_rcp_process_free_signup' );
 
 function cgc_rcp_force_auto_renew( $data ) {
-	if( ! empty( $data['length'] ) ) {
+
+	$gateway = isset( $_POST['rcp_gateway'] ) ? $_POST['rcp_gateway'] : 'stripe';
+
+	if( ! empty( $data['length'] ) && 'paypal' !== $gateway ) {
 		$data['auto_renew'] = 1;
 	} else {
 		$data['auto_renew'] = false;
