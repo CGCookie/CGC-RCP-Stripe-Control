@@ -16,6 +16,7 @@
 
 function cgc_rcp_remove_actions() {
 	remove_action('rcp_before_registration_submit_field', 'rcp_stripe_form_fields');
+	remove_action( 'rcp_stripe_charge_failed', 'rcp_email_failed_payment_notice', 10 );
 }
 add_action( 'init', 'cgc_rcp_remove_actions' );
 
