@@ -187,14 +187,27 @@ function cgc_rcp_force_auto_renew( $data ) {
 
 	$gateway = isset( $_POST['rcp_gateway'] ) ? $_POST['rcp_gateway'] : 'stripe';
 
-	if( ! empty( $data['length'] ) && 'paypal' !== $gateway ) {
-		$data['auto_renew'] = 1;
-	} else {
+	if( 'paypal' == $gateway ) {
+
 		$data['auto_renew'] = false;
+
+	} else {
+
+		if( ! empty( $data['length'] ) ) {
+
+			$data['auto_renew'] = 1;
+
+		} else {
+
+			$data['auto_renew'] = false;
+
+		}
+
 	}
+
 	return $data;
 }
-add_filter( 'rcp_subscription_data', 'cgc_rcp_force_auto_renew' );
+add_filter( 'rcp_subscription_data', 'cgc_rcp_force_auto_renew', 999999 );
 
 function cgc_rcp_filter_username_length( $user ) {
 	if( strlen( $user['login'] ) < 4 && ! empty( $user['need_new'] ) ) {
