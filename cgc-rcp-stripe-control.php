@@ -11,7 +11,6 @@
  *
  * The update card form is processed by RCP Stripe, this simply controls the HTML.
  *
- *
  */
 
 function cgc_rcp_remove_actions() {
