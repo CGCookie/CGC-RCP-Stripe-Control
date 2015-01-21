@@ -1,0 +1,27 @@
+{
+   	"name": "cgcookie/cgc-rcp-stripe-control",
+   	"type": "wordpress-plugin",
+	"description": "RCP related modifications specific to CG Cookie",
+	"keywords": [ "rcp", "pippin"],
+	"homepage": "http://cgcookie.com",
+	"authors": [
+	    {
+	      	"name": "Nick Haskins",
+	      	"email": "nick@cgcookie.com",
+	      	"homepage": "http://cgcookie.com"
+	    },
+	    {
+	      	"name": "Wes Burke",
+	      	"email": "wes@cgcookie.com",
+	      	"homepage": "http://cgcookie.com"
+	    },
+	   	{
+	      	"name": "Jonathan Williamson",
+	      	"email": "jonathan@cgcookie.com",
+	      	"homepage": "http://cgcookie.com"
+	    }
+	],
+   	"require": {
+     	"composer/installers": "~1.0.6"
+   	}
+}
